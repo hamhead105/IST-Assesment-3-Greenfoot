@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.target=Camera
+comment0.text=\r\n\ Write\ a\ description\ of\ class\ Camera\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment1.params=camX\ camY
+comment1.target=Camera(int,\ int)
+comment2.params=
+comment2.target=void\ act()
+comment3.params=x
+comment3.target=void\ setCamX(int)
+comment4.params=
+comment4.target=int\ getCamX()
+comment5.params=y
+comment5.target=void\ setCamY(int)
+comment6.params=
+comment6.target=int\ getCamY()
+numComments=7

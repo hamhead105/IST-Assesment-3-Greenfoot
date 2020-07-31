@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=GameObject
+comment0.text=\r\n\ Write\ a\ description\ of\ class\ GameObject\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment1.params=
+comment1.target=void\ act()
+comment1.text=\r\n\ Act\ -\ do\ whatever\ the\ GameObject\ wants\ to\ do.\ This\ method\ is\ called\ whenever\r\n\ the\ 'Act'\ or\ 'Run'\ button\ gets\ pressed\ in\ the\ environment.\r\n
+comment2.params=
+comment2.target=void\ updateLocation()
+comment3.params=
+comment3.target=int\ getFieldX()
+comment4.params=x
+comment4.target=void\ setFieldX(int)
+comment5.params=
+comment5.target=int\ getFieldY()
+comment6.params=y
+comment6.target=void\ setFieldY(int)
+comment7.params=y
+comment7.target=void\ moveY(int)
+comment8.params=x
+comment8.target=void\ moveX(int)
+numComments=9

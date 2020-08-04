@@ -11,9 +11,16 @@ public class Camera extends Actor
     private static int camX;
     private static int camY;
     
+    private static int currentCamX;
+    private static int currentCamY;
+    
+    private static int cameraSpeed;
+    
     public Camera (int camX, int camY) {
         this.camX = camX;
         this.camY = camY;
+        
+        cameraSpeed = 1.1;
     }
     
     public void act() 

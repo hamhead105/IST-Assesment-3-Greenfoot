@@ -9,7 +9,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Player extends GameObject
 {
     private int speed;
-    private int cameraBias; // a higher bias will mean the camera stays closer to the player;
+    private double cameraBias; // a higher bias will mean the camera drifts further away;
 
     /**
      * Act - do whatever the Player wants to do. This method is called whenever
@@ -19,6 +19,7 @@ public class Player extends GameObject
         GreenfootImage image = getImage();
         image.scale(240,200);
         speed = 2;
+        cameraBias = 0.3;
     }
     
     public void act() 
@@ -61,7 +62,9 @@ public class Player extends GameObject
     }
     
     public void updateCamPlayerOffset(int x, int y) {
-        Camera.setCamPosition(this.getFieldX() - 800 + x, this.getFieldY() + y - 600);
+        Camera.setCamX((int) Math.round(this.getFieldX() + ((x - getWorld().getWidth() / 2) * cameraBias) - (getWorld().getWidth() / 2)));
+        Camera.setCamY((int) Math.round (this.getFieldY() + ((y - getWorld().getHeight() / 2) * cameraBias) - (getWorld().getHeight() / 2)));
+        //Camera.setCamPosition((int) Math.round(this.getFieldX() + (x * cameraBias) - (getWorld().getWidth() / 2)), (int) Math.round (this.getFieldY() + (y * cameraBias) - getWorld().getHeight()));
     }
     
     public int getSpeed() {

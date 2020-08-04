@@ -11,20 +11,23 @@ public class Camera extends Actor
     private static int camX;
     private static int camY;
     
-    private static int currentCamX;
-    private static int currentCamY;
+    private static int targetCamX;
+    private static int targetCamY;
     
-    private static int cameraSpeed;
+    private static double cameraSpeed;
     
     public Camera (int camX, int camY) {
         this.camX = camX;
         this.camY = camY;
         
-        cameraSpeed = 1.1;
+        cameraSpeed = 10;
     }
     
     public void act() 
     {
+        camX += (int) Math.round((targetCamX - camX) / cameraSpeed);
+        camY += (int) Math.round((targetCamY - camY) / cameraSpeed);
+
         /* basic camera moving
         if (Greenfoot.isKeyDown("down")) {
             camY -= 5;
@@ -40,6 +43,27 @@ public class Camera extends Actor
         }
         */
     } 
+    
+    public static void setTargetCamX(int x) {
+        targetCamX = x;
+    }
+    
+    public static int getTargetCamX() {
+        return targetCamX;
+    }
+    
+    public static void setTargetCamY(int y) {
+        targetCamY = y;
+    }
+    
+    public static int getTargetCamY() {
+        return targetCamY;
+    }
+    
+    public static void setTargetCamPosition(int x, int y) {
+        targetCamX = x;
+        targetCamY = y;
+    }
     
     public static void setCamX(int x) {
         camX = x;

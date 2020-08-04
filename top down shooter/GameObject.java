@@ -48,4 +48,9 @@ public class GameObject extends Actor
     public void moveX(int x) {
         fieldX += x;
     }
+    
+    public void setFieldPosition(int x, int  y) {
+        fieldX = x;
+        fieldY = y;
+    }
 }

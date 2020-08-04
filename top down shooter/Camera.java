@@ -18,7 +18,20 @@ public class Camera extends Actor
     
     public void act() 
     {
-        // Add your action code here.
+        /* basic camera moving
+        if (Greenfoot.isKeyDown("down")) {
+            camY -= 5;
+        }
+        if (Greenfoot.isKeyDown("up")) {
+            camY += 5;
+        }
+         if (Greenfoot.isKeyDown("right")) {
+            camX += 5;
+        }
+        if (Greenfoot.isKeyDown("left")) {
+            camX -= 5;
+        }
+        */
     } 
     
     public static void setCamX(int x) {
@@ -35,5 +48,10 @@ public class Camera extends Actor
     
     public static int getCamY() {
         return camY;
+    }
+    
+    public static void setCamPosition(int x, int y) {
+        camX = x;
+        camY = y;
     }
 }

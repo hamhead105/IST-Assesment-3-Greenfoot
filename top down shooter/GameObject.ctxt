@@ -18,4 +18,6 @@ comment7.params=y
 comment7.target=void\ moveY(int)
 comment8.params=x
 comment8.target=void\ moveX(int)
-numComments=9
+comment9.params=x\ y
+comment9.target=void\ setFieldPosition(int,\ int)
+numComments=10

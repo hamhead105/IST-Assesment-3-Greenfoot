@@ -13,4 +13,6 @@ comment5.params=y
 comment5.target=void\ setCamY(int)
 comment6.params=
 comment6.target=int\ getCamY()
-numComments=7
+comment7.params=x\ y
+comment7.target=void\ setCamPosition(int,\ int)
+numComments=8

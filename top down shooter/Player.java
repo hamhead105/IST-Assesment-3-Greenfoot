@@ -1,4 +1,4 @@
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
  * Write a description of class Player here.
@@ -10,6 +10,7 @@ public class Player extends GameObject
 {
     private int speed;
     private double cameraBias; // a higher bias will mean the camera drifts further away;
+    private boolean mouseDown;
 
     /**
      * Act - do whatever the Player wants to do. This method is called whenever
@@ -44,12 +45,24 @@ public class Player extends GameObject
         if(Greenfoot.isKeyDown("left")) {
             turn(-5);
         }
-        // setLocation (fieldX - Camera.getCamX(), fieldY - Camera.getCamY());
-        // if (mouseInfo!=null) setRotation (mouseInfo.getX());
+    
         if (mouseInfo!=null) {
             lookAtPosition (mouseInfo.getX(), mouseInfo.getY());
             updateCamPlayerOffset(mouseInfo.getX(), mouseInfo.getY());
+       
         }
+      
+        if (Greenfoot.mousePressed(null)) {
+            mouseDown = true;
+            shoot();
+        } else if (Greenfoot.mouseClicked(null)){
+            mouseDown = false;
+        }
+        if (mouseDown) {
+           // shoot();
+        }   
+           
+        
         updateLocation();
     }
     
@@ -73,5 +86,20 @@ public class Player extends GameObject
     
     public void setSpeed(int speed) {
         this.speed = speed;
+    }
+    
+    public void shoot() {
+        int barrelXOffset = 16;
+        int barrelYOffset = 75;
+        double alpha = 0;
+        double theta = Math.toDegrees(Math.atan(barrelYOffset / barrelXOffset));
+        double h = Math.sqrt(Math.pow(barrelXOffset, 2) + Math.pow(barrelYOffset, 2));
+        alpha = getRotation() - theta;
+        int worldXOffset = (int) Math.round(Math.cos(Math.toRadians(alpha)) * h);
+        int worldYOffset = (int) Math.round(Math.sin(Math.toRadians(alpha)) * h);
+        
+       
+        Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90, 20, 40, 20);
+        getWorld().addObject(bullet, 0, 0);
     }
 }

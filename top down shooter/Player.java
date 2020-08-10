@@ -97,9 +97,8 @@ public class Player extends GameObject
         alpha = getRotation() - theta;
         int worldXOffset = (int) Math.round(Math.cos(Math.toRadians(alpha)) * h);
         int worldYOffset = (int) Math.round(Math.sin(Math.toRadians(alpha)) * h);
-        
        
-        Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90, 20, 40, 20);
+        Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90, 50, 40, 20);
         getWorld().addObject(bullet, 0, 0);
     }
 }

@@ -35,4 +35,11 @@ public class Bullet extends GameObject
             getWorld().removeObject(this);
         }
     }
+    
+    private void collisionCheck() {
+        List<NPC> npcs = getWorld().getObjects(NPC.class);
+        for (NPC npc : npcs) {
+            //if (this
+        }
+    }
 }

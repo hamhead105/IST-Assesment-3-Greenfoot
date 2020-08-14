@@ -19,7 +19,7 @@ public class MyWorld extends World
         super(1200, 700, 1); 
         Camera camera = new Camera(0,0);
         addObject(camera, 0, 0);
-        Bullet bullet = new Bullet(0, 0, 20, 5, 40, 0);
-        addObject(bullet, 0, 0);
+        //Bullet bullet = new Bullet(0, 0, 20, 5, 40, 0);
+        //addObject(bullet, 0, 0);
     }
 }

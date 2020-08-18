@@ -15,7 +15,11 @@ public class NPC extends GameObject
     private long currentTime = System.currentTimeMillis();
     private long nextShotDue;
     
+    private int shootSpread;
+    
     public NPC() {
+        super(-200,200);
+        shootSpread = 40;
         health = 100;
         GreenfootImage image = getImage();
         image.scale(240,200);
@@ -30,7 +34,7 @@ public class NPC extends GameObject
             aimAtPlayer();
             if (currentTime > nextShotDue) {
                 shoot();
-                nextShotDue = currentTime + 400;
+                nextShotDue = currentTime + 800;
             }
         } else {
             fadeAway();
@@ -72,7 +76,7 @@ public class NPC extends GameObject
         int worldXOffset = (int) Math.round(Math.cos(Math.toRadians(alpha)) * h);
         int worldYOffset = (int) Math.round(Math.sin(Math.toRadians(alpha)) * h);
        
-        Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90, 50, 40, 20);
+        Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + shootSpread / 2 - Greenfoot.getRandomNumber(shootSpread) , 50, 40, 5);
         getWorld().addObject(bullet, 0, 0);
     }
 }

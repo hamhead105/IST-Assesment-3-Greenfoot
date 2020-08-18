@@ -1,4 +1,5 @@
  import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+ import java.util.List;
 
 /**
  * Write a description of class Player here.
@@ -21,6 +22,7 @@ public class Player extends GameObject
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public Player() {
+        super(0,0);
         GreenfootImage image = getImage();
         image.scale(240,200);
         speed = 2;
@@ -33,16 +35,16 @@ public class Player extends GameObject
         if (health >= 0) {           
             MouseInfo mouseInfo = Greenfoot.getMouseInfo();
            
-            if (Greenfoot.isKeyDown("W")) {
+            if (Greenfoot.isKeyDown("W") && !collisionCheck(1)) {
                 moveY(-speed);
             }
-            if (Greenfoot.isKeyDown("S")) {
+            if (Greenfoot.isKeyDown("S") && !collisionCheck(3)) {
                 moveY(speed);
             }
-            if (Greenfoot.isKeyDown("A")) {
+            if (Greenfoot.isKeyDown("A") && !collisionCheck(4)) {
                  moveX(-speed);
             }
-            if (Greenfoot.isKeyDown("D")) {
+            if (Greenfoot.isKeyDown("D") && !collisionCheck(2)) {
                 moveX(speed);
             }
             if(Greenfoot.isKeyDown("right")) {
@@ -124,5 +126,69 @@ public class Player extends GameObject
         if (getImage().getTransparency() <= 30) {
             getWorld().removeObject(this);
         }
-    }   
+    }
+    
+    private boolean collisionCheck(int direction) {
+        // 1 - up
+        // 2 - right
+        // 3 - down
+        // 4 - left
+        /*
+        List<NPC> npcs = getWorld().getObjects(NPC.class);
+        for (NPC npc : npcs) {
+            if (Math.sqrt(Math.pow(npc.getFieldX() - this.getFieldX(), 2) + Math.pow(npc.getFieldY() - this.getFieldY(), 2)) <= npc.getColliderRadius()) {
+                npc.hit(damage);
+                willRemove = true;
+            }      
+        }
+        */
+        List<BoxWall> boxWalls = getWorld().getObjects(BoxWall.class);
+        if (direction == 1) {
+            if (boxWalls != null) {
+                for (BoxWall boxWall : boxWalls) {
+                    if (getFieldY() - 5 < boxWall.getFieldY() + boxWall.getColliderBounds() && getFieldY() - 5 > boxWall.getFieldY() - boxWall.getColliderBounds() && getFieldX() < boxWall.getFieldX() + boxWall.getColliderBounds() && getFieldX() > (boxWall.getFieldX() - boxWall.getColliderBounds())) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return false;
+        }
+        else if (direction == 2) {
+            if (boxWalls != null) {
+                for (BoxWall boxWall : boxWalls) {
+                    if (getFieldX() + 5 > boxWall.getFieldX() - boxWall.getColliderBounds() && getFieldX() + 5 < boxWall.getFieldX() + boxWall.getColliderBounds() && getFieldY() < boxWall.getFieldY() + boxWall.getColliderBounds() && getFieldY() > (boxWall.getFieldY() - boxWall.getColliderBounds())) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return false;
+        }
+        else if (direction == 3) {
+            if (boxWalls != null) {
+                for (BoxWall boxWall : boxWalls) {
+                    if (getFieldY() + 5 > boxWall.getFieldY() - boxWall.getColliderBounds() && getFieldY() + 5 < boxWall.getFieldY() + boxWall.getColliderBounds() && getFieldX() < boxWall.getFieldX() + boxWall.getColliderBounds() && getFieldX() > (boxWall.getFieldX() - boxWall.getColliderBounds())) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return false;
+        }
+       else if (direction == 4) {
+            if (boxWalls != null) {
+                for (BoxWall boxWall : boxWalls) {
+                    if (getFieldX() - 5 < boxWall.getFieldX() + boxWall.getColliderBounds() && getFieldX() - 5 > boxWall.getFieldX() - boxWall.getColliderBounds() && getFieldY() < boxWall.getFieldY() + boxWall.getColliderBounds() && getFieldY() > (boxWall.getFieldY() - boxWall.getColliderBounds())) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return false;
+        }
+        else {
+            return false;
+        }
+    }
 }

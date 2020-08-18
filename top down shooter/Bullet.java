@@ -15,10 +15,10 @@ public class Bullet extends GameObject
     private long cullTime = System.currentTimeMillis()+400;
     
     public Bullet(int x, int y, int direction, int speed, int size, int damage) {
+        super(x,y);
         setRotation(direction);
         GreenfootImage image = getImage();
         image.scale(size,size / 10);
-        setFieldPosition(x, y);
         this.speed = speed;
         this.damage = damage;
     }
@@ -39,7 +39,7 @@ public class Bullet extends GameObject
     }
     
     private void collisionCheck() {
-        boolean willRemove = false;;
+        boolean willRemove = false;
         List<NPC> npcs = getWorld().getObjects(NPC.class);
         for (NPC npc : npcs) {
             if (Math.sqrt(Math.pow(npc.getFieldX() - this.getFieldX(), 2) + Math.pow(npc.getFieldY() - this.getFieldY(), 2)) <= npc.getColliderRadius()) {

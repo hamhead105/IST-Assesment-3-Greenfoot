@@ -10,10 +10,10 @@ public class BoxWall extends GameObject
 {
     private int bounds;
     
-    public BoxWall() {
-        super(200,200);
-        bounds = 50;
-        getImage().scale(100,100);       
+    public BoxWall(int x, int y) {
+        super(x,y);
+        bounds = 65;
+        getImage().scale(150,150);       
     }
     
     public void act() 

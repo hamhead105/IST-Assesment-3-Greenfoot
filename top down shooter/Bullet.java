@@ -47,6 +47,7 @@ public class Bullet extends GameObject
                 willRemove = true;
             }      
         }
+        
         List<Player> players = getWorld().getObjects(Player.class);
         if (players != null) {
             for (Player player : players) {
@@ -55,6 +56,14 @@ public class Bullet extends GameObject
                     willRemove = true;
                 }      
             }
+        }
+        List<BoxWall> boxWalls = getWorld().getObjects(BoxWall.class);
+        if (boxWalls != null) {
+            for (BoxWall boxWall : boxWalls) {
+                if (getFieldX() > boxWall.getFieldX() - boxWall.getColliderBounds() && getFieldX() < boxWall.getFieldX() + boxWall.getColliderBounds() && getFieldY() > boxWall.getFieldY() - boxWall.getColliderBounds() && getFieldY() < boxWall.getFieldY() + boxWall.getColliderBounds()) {
+                    willRemove = true;
+                }
+            }       
         }
         if (willRemove) {
              getWorld().removeObject(this);

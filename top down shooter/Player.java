@@ -21,8 +21,8 @@ public class Player extends GameObject
      * Act - do whatever the Player wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
-    public Player() {
-        super(0,0);
+    public Player(int x, int y) {
+        super(x,y);
         GreenfootImage image = getImage();
         image.scale(240,200);
         speed = 2;

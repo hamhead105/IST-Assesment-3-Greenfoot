@@ -35,7 +35,7 @@ public class NPC extends GameObject
         if (health >= 0) {
             aimAtPlayer();
             if (currentTime > nextShotDue) {
-                shoot();
+                if (findTarget(300)) shoot();
                 nextShotDue = currentTime + fireRate;
             }
         } else {
@@ -83,16 +83,73 @@ public class NPC extends GameObject
     }
     
     public boolean findTarget(int range) {
-        int checkRotation;
+        double checkRotationRadians = 0;
         List<Player> players = getWorld().getObjects(Player.class);
+        Player player = null;
         if (players.size() > 0) {
-            Player player = players.get(0);
-            checkRotation = ((int) Math.round (Math.toDegrees(Math.atan2(player.getFieldY() - this.getFieldY(), player.getFieldX() - this.getFieldX()))) + 90);
-        } 
-        int checkDist = 0;
-        while (checkDist <= range) {
-            checkDist++;
+            player = players.get(0);
+            checkRotationRadians = Math.atan2(player.getFieldY() - this.getFieldY(), player.getFieldX() - this.getFieldX()) + Math.toRadians(90);        
+            int yDifference = player.getFieldY() - this.getFieldY();
+            int xDifference = player.getFieldX() - this.getFieldX();
+            int distanceToPlayer = (int) Math.round(Math.sqrt(Math.pow(yDifference,2) + Math.pow(xDifference,2)));
+            int checkDist = 0;
+            int[] playerPosition;
+            playerPosition = new int[2];
+            playerPosition[0] = player.getFieldX();
+            playerPosition[1] = player.getFieldY();
+            
+            // y = mx + b
+            double m = 0;
+            if (xDifference != 0) {
+                m = (double) yDifference/xDifference; // find gradient
+            }
+            System.out.println("fieldX: " + (player.getFieldX() - this.getFieldX()) + " fieldY: " + (player.getFieldY() - this.getFieldY()));
+            System.out.println(this.getFieldY() + " - ( ( " + this.getFieldX() + " ) " + " * " +  m + " ) ");
+            double b = (double) this.getFieldY() - (this.getFieldX() * m); // find y intercept
+            System.out.println("NPC to player gradient: " + this.getFieldY() + " = " + m + " * " + (this.getFieldX()) + " + " + b);
+            List<BoxWall> walls = getWorld().getObjects(BoxWall.class);
+            if (walls != null) {  
+                for (BoxWall boxWall : walls) {
+                    System.out.println("wallY: " + boxWall.getFieldY() + " == " + (m*boxWall.getFieldX() + b));
+                    if (boxWall.getFieldY() >= ((m*boxWall.getFieldX()) + b) - (boxWall.getColliderBounds() * 3) && 
+                        boxWall.getFieldY() <= ((m*boxWall.getFieldX()) + b) + (boxWall.getColliderBounds() * 3) &&
+                        boxWall.getFieldX() >= ((boxWall.getFieldY() - b) / m) - (boxWall.getColliderBounds() * 3) && 
+                        boxWall.getFieldX() <= ((boxWall.getFieldY() - b) / m) + (boxWall.getColliderBounds() * 3)){
+                            //System.out.println("wall in way");
+                            System.out.println("Wall gradient: " + boxWall.getFieldY() + " = " + m + " * " +  + boxWall.getFieldX() + " + " + b + " obstruction");
+                            return false;
+                    } else {
+                        System.out.println("Wall gradient: " + boxWall.getFieldY() + " = " + m + " * " +  + boxWall.getFieldX() + " + " + b + " not-obstructing");
+                    }
+                }
+                return true;
+            }
         }
         return true;
+        
+            /*
+            int checkX = getFieldX();
+        int checkY = getFieldY();
+        
+        while (checkDist <= range) {
+            checkX = checkDist * (int) Math.round(Math.cos(checkRotationRadians));
+            checkY = checkDist * (int) Math.round(Math.sin(checkRotationRadians));
+            List<BoxWall> walls = getWorld().getObjects(BoxWall.class);
+            if (walls != null) {
+                for (BoxWall boxWall : walls) {
+                    if (checkX > boxWall.getFieldX() - boxWall.getColliderBounds() && checkX < boxWall.getFieldX() + boxWall.getColliderBounds() && checkY > boxWall.getFieldY() - boxWall.getColliderBounds() && checkY < boxWall.getFieldY() + boxWall.getColliderBounds()) {
+                        return false;
+                    }   
+                }      
+            }
+            if (player != null) {
+                if (checkX > player.getFieldX() - player.getColliderRadius() && checkX < player.getFieldX() + player.getColliderRadius() && checkY > player.getFieldY() - player.getColliderRadius() && checkY < player.getFieldY() + player.getColliderRadius()) {
+                    return true;
+                }
+            } 
+            checkDist++;
+        }
+        */
+       
     }
 }

@@ -78,7 +78,7 @@ public class NPC extends GameObject
         int worldXOffset = (int) Math.round(Math.cos(Math.toRadians(alpha)) * h);
         int worldYOffset = (int) Math.round(Math.sin(Math.toRadians(alpha)) * h);
        
-        Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + shootSpread / 2 - Greenfoot.getRandomNumber(shootSpread) , 50, 40, 5);
+        Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + shootSpread / 2 - Greenfoot.getRandomNumber(shootSpread) , 50, 40, 0);
         getWorld().addObject(bullet, 0, 0);
     }
     
@@ -93,14 +93,11 @@ public class NPC extends GameObject
             int xDifference = player.getFieldX() - this.getFieldX();
             int distanceToPlayer = (int) Math.round(Math.sqrt(Math.pow(yDifference,2) + Math.pow(xDifference,2)));
             int checkDist = 0;
-            int wallNum = 0;
             int[] playerPosition;
             int rotationToPlayer = (int) Math.round (Math.toDegrees(Math.atan2(player.getFieldY() - this.getFieldY(), player.getFieldX() - this.getFieldX())));           
             List<BoxWall> walls = getWorld().getObjects(BoxWall.class);
             if (walls != null) {                  
                 for (BoxWall boxWall : walls) {
-                    System.out.println("wall number " + wallNum);
-                    wallNum++;
                     int[][] cornerPositions = new int[4][2];
                     cornerPositions[0][0] = boxWall.getFieldX() - boxWall.getColliderBounds(); //top left
                     cornerPositions[0][1] = boxWall.getFieldY() + boxWall.getColliderBounds();
@@ -108,15 +105,15 @@ public class NPC extends GameObject
                     cornerPositions[1][1] = boxWall.getFieldY() + boxWall.getColliderBounds();
                     cornerPositions[2][0] = boxWall.getFieldX() + boxWall.getColliderBounds(); // bottom right
                     cornerPositions[2][1] = boxWall.getFieldY() - boxWall.getColliderBounds();
-                    cornerPositions[2][0] = boxWall.getFieldX() - boxWall.getColliderBounds(); // bottom left
-                    cornerPositions[2][1] = boxWall.getFieldY() - boxWall.getColliderBounds();
+                    cornerPositions[3][0] = boxWall.getFieldX() - boxWall.getColliderBounds(); // bottom left
+                    cornerPositions[3][1] = boxWall.getFieldY() - boxWall.getColliderBounds();
                     
                     int[] rotationCorners = new int[4];
                     rotationCorners[0] = (int) Math.round (Math.toDegrees(Math.atan2(cornerPositions[0][1] - this.getFieldY(), cornerPositions[0][0] - this.getFieldX())));
                     rotationCorners[1] = (int) Math.round (Math.toDegrees(Math.atan2(cornerPositions[1][1] - this.getFieldY(), cornerPositions[1][0] - this.getFieldX())));
                     rotationCorners[2] = (int) Math.round (Math.toDegrees(Math.atan2(cornerPositions[2][1] - this.getFieldY(), cornerPositions[2][0] - this.getFieldX())));
                     rotationCorners[3] = (int) Math.round (Math.toDegrees(Math.atan2(cornerPositions[3][1] - this.getFieldY(), cornerPositions[3][0] - this.getFieldX())));
-                    
+                    System.out.println("corner 1: " + rotationCorners[0] + " corner 2: " + rotationCorners[1] + " corner 3: " + rotationCorners[2] + " corner 4: " + rotationCorners[3]);
                     int largest = rotationCorners[0];
                     int smallest = rotationCorners[0];
                     int i;
@@ -126,9 +123,10 @@ public class NPC extends GameObject
                     for (i=1;i<rotationCorners.length; i++) {
                         if (rotationCorners[i] < smallest) smallest = rotationCorners[i];
                     }
-                    System.out.println("largest: " + largest + " smallest: " + smallest + " player: " + rotationToPlayer);
-                    if (rotationToPlayer > smallest && rotationToPlayer < largest) {
-                        return false;
+                    double distanceToWall = Math.sqrt((Math.pow(boxWall.getFieldX() - this.getFieldX(), 2) + (Math.pow(boxWall.getFieldY() - this.getFieldY(), 2))));
+                    //System.out.println("smallest: " + smallest + " | largest: " + largest + " | player: " + rotationToPlayer);
+                    if (rotationToPlayer > smallest && rotationToPlayer < largest && distanceToWall < distanceToPlayer) {
+                        return false;   
                     }
                 }
                 return true;

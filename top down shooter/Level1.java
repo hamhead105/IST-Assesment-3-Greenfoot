@@ -23,8 +23,8 @@ public class Level1 extends World
         addObject(camera, 0, 0);
         BoxWall wall1 = new BoxWall(200,200);
         addObject(wall1, 0, 0);
-        //BoxWall wall2 = new BoxWall(290,200);
-        //addObject(wall2, 0, 0);
+        BoxWall wall2 = new BoxWall(290,200);
+        addObject(wall2, 0, 0);
         NPC enemy1 = new NPC(250, 500);
         addObject(enemy1, 0, 0);
         //Bullet bullet = new Bullet(0, 0, 20, 5, 40, 0);

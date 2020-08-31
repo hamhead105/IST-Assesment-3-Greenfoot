@@ -14,6 +14,15 @@ public class Player extends GameObject
     private boolean mouseDown;    
     private int health;
     private int colliderRadius = 30;
+    private int fireRate;
+    private int nextShotAvailable;
+    
+    //gun stats
+    private int spreadCurrent;
+    private int spreadMin;
+    private int spreadMax;
+    private int spreadShotGain;
+    private int spreadRecover;
     
     /**
      * Act - do whatever the Player wants to do. This method is called whenever
@@ -26,6 +35,14 @@ public class Player extends GameObject
         speed = 2;
         cameraBias = 0.3;
         health = 100;
+        fireRate = 100;
+        nextShotAvailable = (int) System.currentTimeMillis();
+   
+        spreadMin = 1;
+        spreadMax = 15;
+        spreadShotGain = 10; 
+        spreadRecover = 8;
+        spreadCurrent = spreadMin;
     }
     
     public void act() 
@@ -58,17 +75,18 @@ public class Player extends GameObject
             }         
             if (Greenfoot.mousePressed(null)) {
                 mouseDown = true;
-                shoot();
+                //shoot();
             } else if (Greenfoot.mouseClicked(null)){
                 mouseDown = false;
             }
-            if (mouseDown) {
-               // shoot();
+            if (mouseDown && weaponReady()) {
+                shoot();
             }
         } else {
             fadeAway();
         }
         updateLocation();
+        updateWeaponControl();
     }
         
     public void lookAtPosition(int x, int y) {
@@ -94,6 +112,7 @@ public class Player extends GameObject
     }
     
     public void shoot() {
+        Greenfoot.playSound("HK416.mp3");
         int barrelXOffset = 16;
         int barrelYOffset = 75;
         double alpha = 0;
@@ -103,8 +122,9 @@ public class Player extends GameObject
         int worldXOffset = (int) Math.round(Math.cos(Math.toRadians(alpha)) * h);
         int worldYOffset = (int) Math.round(Math.sin(Math.toRadians(alpha)) * h);
        
-        Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90, 50, 40, 20);
+        Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + ((spreadCurrent / 2) - Greenfoot.getRandomNumber(spreadCurrent)), 50, 40, 20);
         getWorld().addObject(bullet, 0, 0);
+        spreadCurrent += spreadShotGain;
     }
     
     public void hit(int damage) {
@@ -127,15 +147,6 @@ public class Player extends GameObject
         // 2 - right
         // 3 - down
         // 4 - left
-        /*
-        List<NPC> npcs = getWorld().getObjects(NPC.class);
-        for (NPC npc : npcs) {
-            if (Math.sqrt(Math.pow(npc.getFieldX() - this.getFieldX(), 2) + Math.pow(npc.getFieldY() - this.getFieldY(), 2)) <= npc.getColliderRadius()) {
-                npc.hit(damage);
-                willRemove = true;
-            }      
-        }
-        */
         List<BoxWall> boxWalls = getWorld().getObjects(BoxWall.class);
         if (direction == 1) {
             if (boxWalls != null) {
@@ -184,5 +195,19 @@ public class Player extends GameObject
         else {
             return false;
         }
+    }
+    
+    public boolean weaponReady() {
+        if ((int)System.currentTimeMillis() >= nextShotAvailable) {
+            nextShotAvailable = (int) System.currentTimeMillis() + fireRate;
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public void updateWeaponControl() {
+        if (spreadCurrent > spreadMax) spreadCurrent = spreadMax;
+        spreadCurrent += (int) Math.round((spreadMin - spreadCurrent) / spreadRecover);
     }
 }

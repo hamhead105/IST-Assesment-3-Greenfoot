@@ -69,6 +69,7 @@ public class NPC extends GameObject
     }
     
     public void shoot() {
+        Greenfoot.playSound("HK416.mp3");
         int barrelXOffset = 16;
         int barrelYOffset = 75;
         double alpha = 0;

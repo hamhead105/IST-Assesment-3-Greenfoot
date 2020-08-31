@@ -11,12 +11,10 @@ public class Player extends GameObject
 {
     private int speed;
     private double cameraBias; // a higher bias will mean the camera drifts further away;
-    private boolean mouseDown;
-    
+    private boolean mouseDown;    
     private int health;
     private int colliderRadius = 30;
     
-
     /**
      * Act - do whatever the Player wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
@@ -56,10 +54,8 @@ public class Player extends GameObject
         
             if (mouseInfo!=null) {
                 lookAtPosition (mouseInfo.getX(), mouseInfo.getY());
-                updateCamPlayerOffset(mouseInfo.getX(), mouseInfo.getY());
-           
-            }
-          
+                updateCamPlayerOffset(mouseInfo.getX(), mouseInfo.getY());           
+            }         
             if (Greenfoot.mousePressed(null)) {
                 mouseDown = true;
                 shoot();
@@ -74,9 +70,7 @@ public class Player extends GameObject
         }
         updateLocation();
     }
-    
-
-    
+        
     public void lookAtPosition(int x, int y) {
         setRotation((int) Math.round(Math.toDegrees((Math.atan2(y + Camera.getCamY() - getFieldY(), x + Camera.getCamX() - getFieldX())))) + 90); 
         /* if (x - fieldX > 0 && y - fieldY > 0) {  // sector 1

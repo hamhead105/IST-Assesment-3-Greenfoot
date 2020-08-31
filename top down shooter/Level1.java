@@ -16,7 +16,7 @@ public class Level1 extends World
     public Level1()
     {    
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
-        super(1200, 700, 1); 
+        super(1200, 700, 1);        
         Player player = new Player(0,0);
         addObject(player, 0, 0);
         Camera camera = new Camera(0,0);
@@ -31,6 +31,8 @@ public class Level1 extends World
         addObject(wall4, 0, 0);
         NPC enemy1 = new NPC(250, 500);
         addObject(enemy1, 0, 0);
+        Border border = new Border();
+        addObject(border, 600, 350);
         //Bullet bullet = new Bullet(0, 0, 20, 5, 40, 0);
         //addObject(bullet, 0, 0);
     }

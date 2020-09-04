@@ -20,7 +20,7 @@ public class Bullet extends GameObject
         GreenfootImage image = getImage();
         image.scale(size,size / 10);
         this.speed = speed;
-        this.damage = damage;
+        this.damage = damage;      
     }
     
     public void act() 

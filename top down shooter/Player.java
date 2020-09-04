@@ -33,7 +33,7 @@ public class Player extends GameObject
         GreenfootImage image = getImage();
         image.scale(240,200);
         speed = 2;
-        cameraBias = 0.3;
+        cameraBias = 0.35;
         health = 100;
         fireRate = 100;
         nextShotAvailable = (int) System.currentTimeMillis();

@@ -1,5 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
-
+import java.util.ArrayList;
 /**
  * Write a description of class Level1 here.
  * 
@@ -8,7 +8,19 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Level1 extends World
 {
-
+    private int levelXOffset = -200;
+    private int levelYOffset = 200;
+    private int levelLength = 5;
+    int[] levelStructure = {
+        0,0,1,0,0,
+        0,0,1,0,0,
+        1,1,1,1,1,
+        0,0,1,0,0,
+        0,0,1,0,0,
+    };    
+    
+    ArrayList<BoxWall> boxWalls = new ArrayList<BoxWall>();
+    
     /**
      * Constructor for objects of class Level1.
      * 
@@ -16,24 +28,36 @@ public class Level1 extends World
     public Level1()
     {    
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
-        super(1200, 700, 1);        
-        Player player = new Player(0,0);
-        addObject(player, 0, 0);
+        super(1200, 700, 1);
+        createLevel();        
+    }
+    
+    public void createLevel() {
+        int i = 0;
+        for (int object : levelStructure) {
+            addGameObject(object, ((i % levelLength) * 90) - levelXOffset, (int) Math.floor(i / levelLength) * 90);
+            i++;
+        }
+        
+        Player player = new Player(0,0);  
+        addObject(player,0,0);
         Camera camera = new Camera(0,0);
-        addObject(camera, 0, 0);
-        BoxWall wall1 = new BoxWall(200,200);
-        addObject(wall1, 0, 0);
-        BoxWall wall2 = new BoxWall(290,200);
-        addObject(wall2, 0, 0);
-        BoxWall wall3 = new BoxWall(200,800);
-        addObject(wall3, 0, 0);
-        BoxWall wall4 = new BoxWall(290,800);
-        addObject(wall4, 0, 0);
-        NPC enemy1 = new NPC(250, 500);
-        addObject(enemy1, 0, 0);
+        addObject(camera,0,0);
         Border border = new Border();
         addObject(border, 600, 350);
-        //Bullet bullet = new Bullet(0, 0, 20, 5, 40, 0);
-        //addObject(bullet, 0, 0);
+        createGameObjects();
+    }
+    
+    public void addGameObject(int objectType, int x, int y) {
+        if (objectType == 1) {
+            boxWalls.add(new BoxWall(x,y));
+        }
+    }
+    
+    public void createGameObjects() {
+        for (BoxWall boxWall : boxWalls) {
+            //System.out.println(boxWall  + " " + boxWall.getFieldX() + " " + boxWall.getFieldY());
+            addObject(boxWall, 0, 0);
+        }
     }
 }

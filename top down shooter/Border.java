@@ -16,8 +16,10 @@ public class Border extends Actor
         GreenfootImage image = getImage();
         image.scale(1245,745);
     }
+    
     public void act() 
     {
+        getWorld().setPaintOrder(Border.class);
         // Add your action code here.
     }    
 }

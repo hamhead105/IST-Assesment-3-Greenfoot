@@ -11,11 +11,11 @@ public class Bullet extends GameObject
 {
     private int speed;
     private World world;
-    private int damage;
-    private long cullTime = System.currentTimeMillis()+400;
-    
+    private int damage;   
+    private long cullTime;
     public Bullet(int x, int y, int direction, int speed, int size, int damage) {
         super(x,y);
+        cullTime = System.currentTimeMillis()+400;
         setRotation(direction);
         GreenfootImage image = getImage();
         image.scale(size,size / 10);
@@ -34,7 +34,7 @@ public class Bullet extends GameObject
     
     public void timedDestroy() {
         if (System.currentTimeMillis() > cullTime) {
-            getWorld().removeObject(this);
+            //getWorld().removeObject(this);
         }
     }
     

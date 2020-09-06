@@ -8,15 +8,22 @@ import java.util.ArrayList;
  */
 public class Level1 extends World
 {
-    private int levelXOffset = -200;
-    private int levelYOffset = 200;
-    private int levelLength = 5;
+    private int levelXOffset = -1;
+    private int levelYOffset = -1;
+    private int levelLength = 20;
     int[] levelStructure = {
-        0,0,1,0,0,
-        0,0,1,0,0,
-        1,1,1,1,1,
-        0,0,1,0,0,
-        0,0,1,0,0,
+        1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+        1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
     };    
     
     ArrayList<BoxWall> boxWalls = new ArrayList<BoxWall>();
@@ -35,7 +42,7 @@ public class Level1 extends World
     public void createLevel() {
         int i = 0;
         for (int object : levelStructure) {
-            addGameObject(object, ((i % levelLength) * 90) - levelXOffset, (int) Math.floor(i / levelLength) * 90);
+            addGameObject(object, ((i % levelLength) * 90) + (90 * levelXOffset), ((int) Math.floor(i / levelLength) * 90) + (90 * levelYOffset));
             i++;
         }
         

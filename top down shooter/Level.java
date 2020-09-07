@@ -40,10 +40,6 @@ public class Level extends World
         addObject(player,0,0);
         Camera camera = new Camera(0,0);
         addObject(camera,0,0);
-        NPC npc1 = new NPC(500, 150);
-        addObject(npc1,0,0);
-        Flag flag = new Flag(800, 150);
-        addObject(flag, 0, 0);
         //Border border = new Border();
         //addObject(border, 600, 350);
         createGameObjects();

@@ -29,8 +29,7 @@ public class LevelButton extends Button
         if (level == 1) {
             Level1 level1 = new Level1();
             Greenfoot.setWorld(level1);
-        }
-        /*
+        }       
         if (level == 2) {
             Level2 level2 = new Level2();
             Greenfoot.setWorld(level2);
@@ -39,6 +38,5 @@ public class LevelButton extends Button
             Level3 level3 = new Level3();
             Greenfoot.setWorld(level3);
         }
-        */
     }
 }

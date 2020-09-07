@@ -87,6 +87,12 @@ public class Player extends GameObject
         }
         updateLocation();
         updateWeaponControl();
+        List<Flag> flags = getWorld().getObjects(Flag.class);
+        for (Flag flag : flags) {
+             if (Math.sqrt(Math.pow(flag.getFieldX() - this.getFieldX(), 2) + Math.pow(flag.getFieldY() - this.getFieldY(), 2)) <= 100) {
+                winLevel();
+            }      
+        }
     }
         
     public void lookAtPosition(int x, int y) {
@@ -209,5 +215,13 @@ public class Player extends GameObject
     public void updateWeaponControl() {
         if (spreadCurrent > spreadMax) spreadCurrent = spreadMax;
         spreadCurrent += (int) Math.round((spreadMin - spreadCurrent) / spreadRecover);
+    }
+    
+    public void winLevel() {
+        getWorld().getBackground().drawImage(new GreenfootImage("You win", 64, null, null), 550, 40);
+        Greenfoot.delay(120);
+        MainMenu menu = new MainMenu();
+        Greenfoot.setWorld(menu);
+                
     }
 }

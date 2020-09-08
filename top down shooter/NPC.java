@@ -126,7 +126,16 @@ public class NPC extends GameObject
                     }
                     double distanceToWall = Math.sqrt((Math.pow(boxWall.getFieldX() - this.getFieldX(), 2) + (Math.pow(boxWall.getFieldY() - this.getFieldY(), 2))));
                     //System.out.println("smallest: " + smallest + " | largest: " + largest + " | player: " + rotationToPlayer);
-                    if (rotationToPlayer > smallest && rotationToPlayer < largest && distanceToWall < distanceToPlayer) {
+                    //TODO find shortest rotation instead of subtracting
+                    if (smallest < 0 && largest > 0) {
+                        //System.out.println("cross 0");
+                        if (smallest < -90) {
+                            if (rotationToPlayer < smallest && rotationToPlayer > -180 || rotationToPlayer > largest && rotationToPlayer < 180) return false;
+                        } else if (smallest > -90) {
+                            if (rotationToPlayer > smallest && rotationToPlayer < 0 || rotationToPlayer < largest && rotationToPlayer > 0) return false;
+                        }
+                    }
+                    else if (rotationToPlayer > smallest && rotationToPlayer < largest && distanceToWall < distanceToPlayer) {
                         return false;   
                     }
                 }

@@ -10,11 +10,6 @@ public class GameObject extends Actor
 {
     private int fieldX;
     private int fieldY;
-
-    /**
-     * Act - do whatever the GameObject wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
     
     public GameObject(int x, int y) {
         this.fieldX = x;

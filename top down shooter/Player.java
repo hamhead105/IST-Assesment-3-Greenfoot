@@ -24,10 +24,6 @@ public class Player extends GameObject
     private int spreadShotGain;
     private int spreadRecover;
     
-    /**
-     * Act - do whatever the Player wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
     public Player(int x, int y) {
         super(x,y);
         GreenfootImage image = getImage();
@@ -86,12 +82,16 @@ public class Player extends GameObject
             fadeAway();
         }
         updateLocation();
-        updateWeaponControl();
+        updateWeaponControl();      
         List<Flag> flags = getWorld().getObjects(Flag.class);
         for (Flag flag : flags) {
              if (Math.sqrt(Math.pow(flag.getFieldX() - this.getFieldX(), 2) + Math.pow(flag.getFieldY() - this.getFieldY(), 2)) <= 100) {
                 winLevel();
             }      
+        }
+        List<HealthBar> healthBars = getWorld().getObjects(HealthBar.class);
+        for (HealthBar healthBar : healthBars) {
+            healthBar.setHealth(health);
         }
     }
         
@@ -144,7 +144,11 @@ public class Player extends GameObject
     public void fadeAway() {
         getImage().setTransparency(getImage().getTransparency() - 30);
         if (getImage().getTransparency() <= 30) {
-            getWorld().removeObject(this);
+            //getWorld().removeObject(this);
+             getWorld().getBackground().drawImage(new GreenfootImage("You Lost", 64, null, null), 550, 40);
+             Greenfoot.delay(120);
+             MainMenu menu = new MainMenu();
+             Greenfoot.setWorld(menu);      
         }
     }
     
@@ -221,7 +225,6 @@ public class Player extends GameObject
         getWorld().getBackground().drawImage(new GreenfootImage("You win", 64, null, null), 550, 40);
         Greenfoot.delay(120);
         MainMenu menu = new MainMenu();
-        Greenfoot.setWorld(menu);
-                
+        Greenfoot.setWorld(menu);      
     }
 }

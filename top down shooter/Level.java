@@ -27,6 +27,8 @@ public class Level extends World
     public void constructLevel(int[] levelStructure) {
         this.levelStructure = levelStructure;
         createLevel();     
+        HealthBar healthBar = new HealthBar();
+        addObject(healthBar, 600, 400);
     }
     
     public void createLevel() {

@@ -29,6 +29,7 @@ public class Player extends GameObject
     private long reloadFinishTime;
     private boolean isReloading;
     private int reloadTime;
+    private int gunType;
     
     public Player(int x, int y) {
         super(x,y);
@@ -51,6 +52,7 @@ public class Player extends GameObject
         currentAmmo = maxAmmo;
         reloadFinishTime = System.currentTimeMillis(); 
         reloadTime = 3000;     
+        gunType = 1;
     }
     
     public void act() 
@@ -171,7 +173,7 @@ public class Player extends GameObject
     public void updateAmmoCount() {
         List<WeaponUI> weaponUIs = getWorld().getObjects(WeaponUI.class);
         for (WeaponUI weaponUI : weaponUIs) {
-            weaponUI.setAmmoCount(currentAmmo,maxAmmo);
+            weaponUI.setAmmoCount(currentAmmo,maxAmmo,gunType);
         }
     }
     

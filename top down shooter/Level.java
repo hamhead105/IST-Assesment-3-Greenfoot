@@ -29,6 +29,8 @@ public class Level extends World
         createLevel();     
         HealthBar healthBar = new HealthBar();
         addObject(healthBar, 600, 400);
+        WeaponUI weaponUI = new WeaponUI();
+        addObject(weaponUI, 600, 400);
     }
     
     public void createLevel() {
@@ -42,8 +44,6 @@ public class Level extends World
         addObject(player,0,0);
         Camera camera = new Camera(0,0);
         addObject(camera,0,0);
-        //Border border = new Border();
-        //addObject(border, 600, 350);
         createGameObjects();
     }
     

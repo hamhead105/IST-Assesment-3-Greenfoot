@@ -24,6 +24,12 @@ public class Player extends GameObject
     private int spreadShotGain;
     private int spreadRecover;
     
+    private int maxAmmo;
+    private int currentAmmo;
+    private long reloadFinishTime;
+    private boolean isReloading;
+    private int reloadTime;
+    
     public Player(int x, int y) {
         super(x,y);
         GreenfootImage image = getImage();
@@ -39,6 +45,12 @@ public class Player extends GameObject
         spreadShotGain = 10; 
         spreadRecover = 8;
         spreadCurrent = spreadMin;
+        
+        isReloading = false;        
+        maxAmmo = 30;
+        currentAmmo = maxAmmo;
+        reloadFinishTime = System.currentTimeMillis(); 
+        reloadTime = 3000;     
     }
     
     public void act() 
@@ -58,13 +70,22 @@ public class Player extends GameObject
             if (Greenfoot.isKeyDown("D") && !collisionCheck(2)) {
                 moveX(speed);
             }
+            if (Greenfoot.isKeyDown("R") && !isReloading) {
+                Greenfoot.playSound("AR-15 Reload.wav");
+                isReloading = true;
+                reloadFinishTime = System.currentTimeMillis()+reloadTime;
+            }
             if(Greenfoot.isKeyDown("right")) {
                 turn(5);
             }
             if(Greenfoot.isKeyDown("left")) {
                 turn(-5);
             }
-        
+            if (System.currentTimeMillis() > reloadFinishTime && isReloading) {
+                isReloading = false;
+                currentAmmo = maxAmmo;
+                updateAmmoCount();
+            }
             if (mouseInfo!=null) {
                 lookAtPosition (mouseInfo.getX(), mouseInfo.getY());
                 updateCamPlayerOffset(mouseInfo.getX(), mouseInfo.getY());           
@@ -76,22 +97,22 @@ public class Player extends GameObject
                 mouseDown = false;
             }
             if (mouseDown && weaponReady()) {
-                shoot();
+                if (!isReloading && currentAmmo > 0) {
+                    shoot();
+                }
             }
         } else {
             fadeAway();
         }
         updateLocation();
-        updateWeaponControl();      
+        updateWeaponControl();    
+        updateAmmoCount();
+        updateHealthBar();
         List<Flag> flags = getWorld().getObjects(Flag.class);
         for (Flag flag : flags) {
              if (Math.sqrt(Math.pow(flag.getFieldX() - this.getFieldX(), 2) + Math.pow(flag.getFieldY() - this.getFieldY(), 2)) <= 100) {
                 winLevel();
             }      
-        }
-        List<HealthBar> healthBars = getWorld().getObjects(HealthBar.class);
-        for (HealthBar healthBar : healthBars) {
-            healthBar.setHealth(health);
         }
     }
         
@@ -119,6 +140,8 @@ public class Player extends GameObject
     
     public void shoot() {
         Greenfoot.playSound("HK416.mp3");
+        currentAmmo--;
+        updateAmmoCount();
         int barrelXOffset = 16;
         int barrelYOffset = 75;
         double alpha = 0;
@@ -135,6 +158,21 @@ public class Player extends GameObject
     
     public void hit(int damage) {
         health -= damage;
+        updateHealthBar();
+    }
+    
+    public void updateHealthBar() {
+        List<HealthBar> healthBars = getWorld().getObjects(HealthBar.class);
+        for (HealthBar healthBar : healthBars) {
+            healthBar.setHealth(health);
+        }
+    }
+    
+    public void updateAmmoCount() {
+        List<WeaponUI> weaponUIs = getWorld().getObjects(WeaponUI.class);
+        for (WeaponUI weaponUI : weaponUIs) {
+            weaponUI.setAmmoCount(currentAmmo,maxAmmo);
+        }
     }
     
     public int getColliderRadius() {

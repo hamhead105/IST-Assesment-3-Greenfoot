@@ -38,7 +38,7 @@ public class Player extends GameObject
         speed = 2;
         cameraBias = 0.35;
         health = 100;
-        fireRate = 100;
+        fireRate = 80;
         nextShotAvailable = (int) System.currentTimeMillis();
    
         spreadMin = 1;
@@ -267,4 +267,5 @@ public class Player extends GameObject
         MainMenu menu = new MainMenu();
         Greenfoot.setWorld(menu);      
     }
+    
 }

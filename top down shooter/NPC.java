@@ -11,27 +11,43 @@ public class NPC extends GameObject
     private int speed;
     private int colliderRadius = 30;
     private int health;
-    
+
     private long currentTime = System.currentTimeMillis();
     private long nextShotDue;
-    
+
     private int shootSpread;
     private int fireRate;
-    
+    private int difficulty;
+
+    private int direction;
+
     public NPC(int x, int y) {
         super(x,y);
         shootSpread = 15;
         health = 100;
         GreenfootImage image = getImage();
         image.scale(240,200);
-        speed = 2;
-        fireRate = 200;
+        speed = 1;
+        fireRate = 150;
+        difficulty = 2;
+        direction = 4;
     }
-    
+
     public void act() 
     {
         currentTime = System.currentTimeMillis();        
         updateLocation();
+        switch(difficulty) {
+            case 1:
+            runDifficultyEasy();
+            break;
+            case 2:
+            runDifficultyMedium();
+            break;
+        }
+    }
+
+    public void runDifficultyEasy() {
         if (health >= 0) {
             aimAtPlayer();
             if (currentTime > nextShotDue) {
@@ -42,24 +58,56 @@ public class NPC extends GameObject
             fadeAway();
         }
     }
-    
+
+    public void runDifficultyMedium() {
+        if (health >= 0) {
+            if (Greenfoot.getRandomNumber(50) == 1) {
+                direction = Greenfoot.getRandomNumber(4) + 1;
+            }
+            //System.out.println(direction);
+            if (!collisionCheck(direction)) {
+                if (direction == 1) {
+                    moveY(-speed);
+                }
+                if (direction == 2) {
+                    moveX(speed);
+                }
+                if (direction == 3) {
+                    moveY(speed);
+                }
+                if (direction == 4) {
+                    moveX(-speed);
+                }
+            } else {
+                direction = Greenfoot.getRandomNumber(4) + 1;
+            }
+            aimAtPlayer();
+            if (currentTime > nextShotDue) {
+                if (findTarget(300)) shoot();
+                nextShotDue = currentTime + fireRate;
+            }
+        } else {
+            fadeAway();
+        }
+    }
+
     public void hit(int damage) {
         health -= damage;
         getImage().setColor(Color.RED);
         //getImage().fill();
     }
-    
+
     public void fadeAway() {
         getImage().setTransparency(getImage().getTransparency() - 30);
         if (getImage().getTransparency() <= 30) {
             getWorld().removeObject(this);
         }
     }
-    
+
     public int getColliderRadius() {
         return colliderRadius;
     }
-    
+
     public void aimAtPlayer() {
         List<Player> players = getWorld().getObjects(Player.class);
         if (players.size() > 0) {
@@ -67,7 +115,7 @@ public class NPC extends GameObject
             setRotation((int) Math.round (Math.toDegrees(Math.atan2(player.getFieldY() - this.getFieldY(), player.getFieldX() - this.getFieldX()))) + 90);
         }
     }
-    
+
     public void shoot() {
         Greenfoot.playSound("HK416.mp3");
         int barrelXOffset = 16;
@@ -78,11 +126,11 @@ public class NPC extends GameObject
         alpha = getRotation() - theta;
         int worldXOffset = (int) Math.round(Math.cos(Math.toRadians(alpha)) * h);
         int worldYOffset = (int) Math.round(Math.sin(Math.toRadians(alpha)) * h);
-       
+
         Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + shootSpread / 2 - Greenfoot.getRandomNumber(shootSpread) , 50, 40, 15);
         getWorld().addObject(bullet, 0, 0);
     }
-    
+
     public boolean findTarget(int range) {
         double checkRotationRadians = 0;
         List<Player> players = getWorld().getObjects(Player.class);
@@ -108,7 +156,7 @@ public class NPC extends GameObject
                     cornerPositions[2][1] = boxWall.getFieldY() - boxWall.getColliderBounds();
                     cornerPositions[3][0] = boxWall.getFieldX() - boxWall.getColliderBounds(); // bottom left
                     cornerPositions[3][1] = boxWall.getFieldY() - boxWall.getColliderBounds();
-                    
+
                     int[] rotationCorners = new int[4];
                     rotationCorners[0] = (int) Math.round (Math.toDegrees(Math.atan2(cornerPositions[0][1] - this.getFieldY(), cornerPositions[0][0] - this.getFieldX())));
                     rotationCorners[1] = (int) Math.round (Math.toDegrees(Math.atan2(cornerPositions[1][1] - this.getFieldY(), cornerPositions[1][0] - this.getFieldX())));
@@ -143,6 +191,61 @@ public class NPC extends GameObject
             }
         }
         return true;
-       
+
+    }
+
+    private boolean collisionCheck(int direction) {
+        // 1 - up
+        // 2 - right
+        // 3 - down
+        // 4 - left
+        List<BoxWall> boxWalls = getWorld().getObjects(BoxWall.class);
+        if (direction == 1) {
+            if (boxWalls != null) {
+                for (BoxWall boxWall : boxWalls) {
+                    if (getFieldY() - 5 < boxWall.getFieldY() + boxWall.getColliderBounds() && getFieldY() - 5 > boxWall.getFieldY() - boxWall.getColliderBounds() && getFieldX() < boxWall.getFieldX() + boxWall.getColliderBounds() && getFieldX() > (boxWall.getFieldX() - boxWall.getColliderBounds())) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return false;
+        }
+        else if (direction == 2) {
+            if (boxWalls != null) {
+                for (BoxWall boxWall : boxWalls) {
+                    if (getFieldX() + 5 > boxWall.getFieldX() - boxWall.getColliderBounds() && getFieldX() + 5 < boxWall.getFieldX() + boxWall.getColliderBounds() && getFieldY() < boxWall.getFieldY() + boxWall.getColliderBounds() && getFieldY() > (boxWall.getFieldY() - boxWall.getColliderBounds())) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return false;
+        }
+        else if (direction == 3) {
+            if (boxWalls != null) {
+                for (BoxWall boxWall : boxWalls) {
+                    if (getFieldY() + 5 > boxWall.getFieldY() - boxWall.getColliderBounds() && getFieldY() + 5 < boxWall.getFieldY() + boxWall.getColliderBounds() && getFieldX() < boxWall.getFieldX() + boxWall.getColliderBounds() && getFieldX() > (boxWall.getFieldX() - boxWall.getColliderBounds())) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return false;
+        }
+        else if (direction == 4) {
+            if (boxWalls != null) {
+                for (BoxWall boxWall : boxWalls) {
+                    if (getFieldX() - 5 < boxWall.getFieldX() + boxWall.getColliderBounds() && getFieldX() - 5 > boxWall.getFieldX() - boxWall.getColliderBounds() && getFieldY() < boxWall.getFieldY() + boxWall.getColliderBounds() && getFieldY() > (boxWall.getFieldY() - boxWall.getColliderBounds())) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return false;
+        }
+        else {
+            return false;
+        }
     }
 }

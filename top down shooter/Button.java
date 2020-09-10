@@ -11,9 +11,9 @@ public class Button extends Actor
     private int clickBoundaryX;
     private int clickBoundaryY;
     
-    public Button() {
-        clickBoundaryX = 200;
-        clickBoundaryY = 100;
+    public Button(int x, int y) {
+        this.clickBoundaryX = x;
+        this.clickBoundaryY = y;
     }
     public void act() 
     {

@@ -10,6 +10,7 @@ public class LevelButton extends Button
 {
     private int level;
     public LevelButton(int level) {
+        super(200, 100);
         this.level = level;
         setImage(new GreenfootImage("level" + level + ".png"));
     }
@@ -24,8 +25,7 @@ public class LevelButton extends Button
         }  
     }
     
-    public void loadMyLevel() {   
-        
+    public void loadMyLevel() {      
         if (level == 1) {
             Level1 level1 = new Level1();
             Greenfoot.setWorld(level1);

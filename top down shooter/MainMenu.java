@@ -24,5 +24,8 @@ public class MainMenu extends World
          addObject(levelButton2, 600, 250);
          LevelButton levelButton3 = new LevelButton(3);
          addObject(levelButton3, 850, 250);
+         DifficultyButton difficultyButton = new DifficultyButton();
+         addObject(difficultyButton, 600, 350);
+         
     }
 }

@@ -33,6 +33,8 @@ public class NPC extends GameObject
         difficulty = 2;
         direction = 4;
         FOV = 60;
+        
+        difficulty = GameSettings.getDifficulty();
     }
 
     public void act() 

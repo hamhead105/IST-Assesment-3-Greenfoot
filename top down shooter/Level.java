@@ -24,8 +24,9 @@ public class Level extends World
         super(1200, 700, 1, false);   
     }
     
-    public void constructLevel(int[] levelStructure) {
+    public void constructLevel(int[] levelStructure, int levelLength) {
         this.levelStructure = levelStructure;
+        this.levelLength = levelLength;
         createLevel();     
         HealthBar healthBar = new HealthBar();
         addObject(healthBar, 600, 400);

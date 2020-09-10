@@ -328,7 +328,7 @@ public class Player extends GameObject
                     }
                 }               
             }
-            System.out.println(getRotation() + " " + (rotationToNPC + 180));
+            //System.out.println(getRotation() + " " + (rotationToNPC + 180));
             if (rotationToNPC > 180 && getRotation() - 90 < 0) {
                 if ((getRotation() - 90) + (360 - rotationToNPC) > (FOV/2)) isVisible = false;
             }

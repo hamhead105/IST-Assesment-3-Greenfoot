@@ -25,6 +25,6 @@ public class test extends Level
     };    
     
     public test() {
-        constructLevel(levelStructure);
+        constructLevel(levelStructure, levelLength);
     }
 }

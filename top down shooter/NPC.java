@@ -264,7 +264,7 @@ public class NPC extends GameObject
         if (visible && health > 0) {
             getImage().setTransparency(255); 
         } else if (health > 0) {
-            getImage().setTransparency(6); 
+            getImage().setTransparency(4); 
         }
     }
 }

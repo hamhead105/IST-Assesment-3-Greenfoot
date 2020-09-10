@@ -98,9 +98,10 @@ public class NPC extends GameObject
     }
 
     public void fadeAway() {
-        getImage().setTransparency(getImage().getTransparency() - 30);
         if (getImage().getTransparency() <= 30) {
             getWorld().removeObject(this);
+        } else {
+            getImage().setTransparency(getImage().getTransparency() - 30);
         }
     }
 
@@ -127,7 +128,7 @@ public class NPC extends GameObject
         int worldXOffset = (int) Math.round(Math.cos(Math.toRadians(alpha)) * h);
         int worldYOffset = (int) Math.round(Math.sin(Math.toRadians(alpha)) * h);
 
-        Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + shootSpread / 2 - Greenfoot.getRandomNumber(shootSpread) , 50, 40, 15);
+        Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + shootSpread / 2 - Greenfoot.getRandomNumber(shootSpread) , 50, 40, 1);
         getWorld().addObject(bullet, 0, 0);
     }
 
@@ -178,9 +179,9 @@ public class NPC extends GameObject
                     if (smallest < 0 && largest > 0) {
                         //System.out.println("cross 0");
                         if (smallest < -90) {
-                            if (rotationToPlayer < smallest && rotationToPlayer > -180 || rotationToPlayer > largest && rotationToPlayer < 180) return false;
+                            if (rotationToPlayer < smallest && rotationToPlayer > -180 || rotationToPlayer > largest && rotationToPlayer <= 180) return false;
                         } else if (smallest > -90) {
-                            if (rotationToPlayer > smallest && rotationToPlayer < 0 || rotationToPlayer < largest && rotationToPlayer > 0) return false;
+                            if (rotationToPlayer > smallest && rotationToPlayer < 0 || rotationToPlayer < largest && rotationToPlayer >= 0) return false;
                         }
                     }
                     else if (rotationToPlayer > smallest && rotationToPlayer < largest && distanceToWall < distanceToPlayer) {
@@ -191,7 +192,6 @@ public class NPC extends GameObject
             }
         }
         return true;
-
     }
 
     private boolean collisionCheck(int direction) {
@@ -246,6 +246,14 @@ public class NPC extends GameObject
         }
         else {
             return false;
+        }
+    }
+    
+    public void setVisible(boolean visible) {
+        if (visible && health > 0) {
+            getImage().setTransparency(255); 
+        } else if (health > 0) {
+            getImage().setTransparency(6); 
         }
     }
 }

@@ -12,7 +12,7 @@ public class BoxWall extends GameObject
     
     public BoxWall(int x, int y) {
         super(x,y);
-        bounds = 65;
+        bounds = 60;
         getImage().scale(150,150);       
     }
     

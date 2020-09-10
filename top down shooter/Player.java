@@ -110,6 +110,7 @@ public class Player extends GameObject
         updateWeaponControl();    
         updateAmmoCount();
         updateHealthBar();
+        updateEnemyVisibility(100);
         List<Flag> flags = getWorld().getObjects(Flag.class);
         for (Flag flag : flags) {
              if (Math.sqrt(Math.pow(flag.getFieldX() - this.getFieldX(), 2) + Math.pow(flag.getFieldY() - this.getFieldY(), 2)) <= 100) {
@@ -268,4 +269,64 @@ public class Player extends GameObject
         Greenfoot.setWorld(menu);      
     }
     
+    public void updateEnemyVisibility(int range) {
+        double checkRotationRadians = 0;
+        List<NPC> npcs = getWorld().getObjects(NPC.class);
+        for (NPC npc : npcs) {
+            boolean isVisible = true;
+            checkRotationRadians = Math.atan2(npc.getFieldY() - this.getFieldY(), npc.getFieldX() - this.getFieldX()) + Math.toRadians(90);        
+            int yDifference = npc.getFieldY() - this.getFieldY();
+            int xDifference = npc.getFieldX() - this.getFieldX();
+            int distanceToNPC = (int) Math.round(Math.sqrt(Math.pow(yDifference,2) + Math.pow(xDifference,2)));
+            int checkDist = 0;
+            int[] playerPosition;
+            int rotationToNPC = (int) Math.round (Math.toDegrees(Math.atan2(npc.getFieldY() - this.getFieldY(), npc.getFieldX() - this.getFieldX())));           
+            List<BoxWall> walls = getWorld().getObjects(BoxWall.class);
+            if (walls != null) {                  
+                for (BoxWall boxWall : walls) {
+                    int[][] cornerPositions = new int[4][2];
+                    cornerPositions[0][0] = boxWall.getFieldX() - boxWall.getColliderBounds(); //top left
+                    cornerPositions[0][1] = boxWall.getFieldY() + boxWall.getColliderBounds();
+                    cornerPositions[1][0] = boxWall.getFieldX() + boxWall.getColliderBounds(); //top right
+                    cornerPositions[1][1] = boxWall.getFieldY() + boxWall.getColliderBounds();
+                    cornerPositions[2][0] = boxWall.getFieldX() + boxWall.getColliderBounds(); // bottom right
+                    cornerPositions[2][1] = boxWall.getFieldY() - boxWall.getColliderBounds();
+                    cornerPositions[3][0] = boxWall.getFieldX() - boxWall.getColliderBounds(); // bottom left
+                    cornerPositions[3][1] = boxWall.getFieldY() - boxWall.getColliderBounds();
+
+                    int[] rotationCorners = new int[4];
+                    rotationCorners[0] = (int) Math.round (Math.toDegrees(Math.atan2(cornerPositions[0][1] - this.getFieldY(), cornerPositions[0][0] - this.getFieldX())));
+                    rotationCorners[1] = (int) Math.round (Math.toDegrees(Math.atan2(cornerPositions[1][1] - this.getFieldY(), cornerPositions[1][0] - this.getFieldX())));
+                    rotationCorners[2] = (int) Math.round (Math.toDegrees(Math.atan2(cornerPositions[2][1] - this.getFieldY(), cornerPositions[2][0] - this.getFieldX())));
+                    rotationCorners[3] = (int) Math.round (Math.toDegrees(Math.atan2(cornerPositions[3][1] - this.getFieldY(), cornerPositions[3][0] - this.getFieldX())));
+                    //System.out.println("corner 1: " + rotationCorners[0] + " corner 2: " + rotationCorners[1] + " corner 3: " + rotationCorners[2] + " corner 4: " + rotationCorners[3]);
+                    int largest = rotationCorners[0];
+                    int smallest = rotationCorners[0];
+                    int i;
+                    for (i=1;i<rotationCorners.length; i++) {
+                        if (rotationCorners[i] > largest) largest = rotationCorners[i];
+                    }
+                    for (i=1;i<rotationCorners.length; i++) {
+                        if (rotationCorners[i] < smallest) smallest = rotationCorners[i];
+                    }
+                    double distanceToWall = Math.sqrt((Math.pow(boxWall.getFieldX() - this.getFieldX(), 2) + (Math.pow(boxWall.getFieldY() - this.getFieldY(), 2))));
+                    //System.out.println("smallest: " + smallest + " | largest: " + largest + " | player: " + rotationToPlayer);
+                    //TODO find shortest rotation instead of subtracting
+                    if (smallest < 0 && largest > 0) {
+                        //System.out.println("cross 0");
+                        if (smallest < -90) {
+                            if (rotationToNPC < smallest && rotationToNPC > -180 || rotationToNPC > largest && rotationToNPC <= 180) isVisible = false;
+                        } else if (smallest > -90) {
+                            if (rotationToNPC > smallest && rotationToNPC < 0 || rotationToNPC < largest && rotationToNPC >= 0) isVisible = false;
+                        }
+                    }
+                    else if (rotationToNPC > smallest && rotationToNPC < largest && distanceToWall < distanceToNPC) {
+                        isVisible = false; 
+                    }
+                }               
+            }
+            npc.setVisible(isVisible);
+        }
+
+    }
 }

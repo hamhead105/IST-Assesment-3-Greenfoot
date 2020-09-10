@@ -1,5 +1,5 @@
- import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
- import java.util.List;
+import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.util.List;
 
 /**
  * Write a description of class Player here.
@@ -16,14 +16,14 @@ public class Player extends GameObject
     private int colliderRadius = 30;
     private int fireRate;
     private int nextShotAvailable;
-    
+
     //gun stats
     private int spreadCurrent;
     private int spreadMin;
     private int spreadMax;
     private int spreadShotGain;
     private int spreadRecover;
-    
+
     private int maxAmmo;
     private int currentAmmo;
     private long reloadFinishTime;
@@ -31,6 +31,8 @@ public class Player extends GameObject
     private int reloadTime;
     private int gunType;
     
+    private int FOV;
+
     public Player(int x, int y) {
         super(x,y);
         GreenfootImage image = getImage();
@@ -40,26 +42,27 @@ public class Player extends GameObject
         health = 100;
         fireRate = 80;
         nextShotAvailable = (int) System.currentTimeMillis();
-   
+
         spreadMin = 1;
         spreadMax = 15;
         spreadShotGain = 10; 
         spreadRecover = 8;
         spreadCurrent = spreadMin;
-        
+
         isReloading = false;        
         maxAmmo = 30;
         currentAmmo = maxAmmo;
         reloadFinishTime = System.currentTimeMillis(); 
         reloadTime = 3000;     
         gunType = 1;
+        FOV = 60;
     }
-    
+
     public void act() 
     {        
         if (health >= 0) {           
             MouseInfo mouseInfo = Greenfoot.getMouseInfo();
-           
+
             if (Greenfoot.isKeyDown("W") && !collisionCheck(1)) {
                 moveY(-speed);
             }
@@ -67,7 +70,7 @@ public class Player extends GameObject
                 moveY(speed);
             }
             if (Greenfoot.isKeyDown("A") && !collisionCheck(4)) {
-                 moveX(-speed);
+                moveX(-speed);
             }
             if (Greenfoot.isKeyDown("D") && !collisionCheck(2)) {
                 moveX(speed);
@@ -113,34 +116,34 @@ public class Player extends GameObject
         updateEnemyVisibility(100);
         List<Flag> flags = getWorld().getObjects(Flag.class);
         for (Flag flag : flags) {
-             if (Math.sqrt(Math.pow(flag.getFieldX() - this.getFieldX(), 2) + Math.pow(flag.getFieldY() - this.getFieldY(), 2)) <= 100) {
+            if (Math.sqrt(Math.pow(flag.getFieldX() - this.getFieldX(), 2) + Math.pow(flag.getFieldY() - this.getFieldY(), 2)) <= 100) {
                 winLevel();
             }      
         }
     }
-        
+
     public void lookAtPosition(int x, int y) {
         setRotation((int) Math.round(Math.toDegrees((Math.atan2(y + Camera.getCamY() - getFieldY(), x + Camera.getCamX() - getFieldX())))) + 90); 
         /* if (x - fieldX > 0 && y - fieldY > 0) {  // sector 1
-           setRotation((int) Math.round(Math.atan2(fieldY - y, fieldX - x))); 
+        setRotation((int) Math.round(Math.atan2(fieldY - y, fieldX - x))); 
         }
-        */
+         */
     }
-    
+
     public void updateCamPlayerOffset(int x, int y) {
         Camera.setTargetCamX((int) Math.round(this.getFieldX() + ((x - getWorld().getWidth() / 2) * cameraBias) - (getWorld().getWidth() / 2)));
         Camera.setTargetCamY((int) Math.round (this.getFieldY() + ((y - getWorld().getHeight() / 2) * cameraBias) - (getWorld().getHeight() / 2)));
         //Camera.setCamPosition((int) Math.round(this.getFieldX() + (x * cameraBias) - (getWorld().getWidth() / 2)), (int) Math.round (this.getFieldY() + (y * cameraBias) - getWorld().getHeight()));
     }
-    
+
     public int getSpeed() {
         return this.speed;
     }
-    
+
     public void setSpeed(int speed) {
         this.speed = speed;
     }
-    
+
     public void shoot() {
         Greenfoot.playSound("HK416.mp3");
         currentAmmo--;
@@ -153,46 +156,46 @@ public class Player extends GameObject
         alpha = getRotation() - theta;
         int worldXOffset = (int) Math.round(Math.cos(Math.toRadians(alpha)) * h);
         int worldYOffset = (int) Math.round(Math.sin(Math.toRadians(alpha)) * h);
-       
+
         Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + ((spreadCurrent / 2) - Greenfoot.getRandomNumber(spreadCurrent)), 50, 40, 20);
         getWorld().addObject(bullet, 0, 0);
         spreadCurrent += spreadShotGain;
     }
-    
+
     public void hit(int damage) {
         health -= damage;
         updateHealthBar();
     }
-    
+
     public void updateHealthBar() {
         List<HealthBar> healthBars = getWorld().getObjects(HealthBar.class);
         for (HealthBar healthBar : healthBars) {
             healthBar.setHealth(health);
         }
     }
-    
+
     public void updateAmmoCount() {
         List<WeaponUI> weaponUIs = getWorld().getObjects(WeaponUI.class);
         for (WeaponUI weaponUI : weaponUIs) {
             weaponUI.setAmmoCount(currentAmmo,maxAmmo,gunType);
         }
     }
-    
+
     public int getColliderRadius() {
         return colliderRadius;
     }
-    
+
     public void fadeAway() {
         getImage().setTransparency(getImage().getTransparency() - 30);
         if (getImage().getTransparency() <= 30) {
             //getWorld().removeObject(this);
-             getWorld().getBackground().drawImage(new GreenfootImage("You Lost", 64, null, null), 550, 40);
-             Greenfoot.delay(120);
-             MainMenu menu = new MainMenu();
-             Greenfoot.setWorld(menu);      
+            getWorld().getBackground().drawImage(new GreenfootImage("You Lost", 64, null, null), 550, 40);
+            Greenfoot.delay(120);
+            MainMenu menu = new MainMenu();
+            Greenfoot.setWorld(menu);      
         }
     }
-    
+
     private boolean collisionCheck(int direction) {
         // 1 - up
         // 2 - right
@@ -232,7 +235,7 @@ public class Player extends GameObject
             }
             return false;
         }
-       else if (direction == 4) {
+        else if (direction == 4) {
             if (boxWalls != null) {
                 for (BoxWall boxWall : boxWalls) {
                     if (getFieldX() - 5 < boxWall.getFieldX() + boxWall.getColliderBounds() && getFieldX() - 5 > boxWall.getFieldX() - boxWall.getColliderBounds() && getFieldY() < boxWall.getFieldY() + boxWall.getColliderBounds() && getFieldY() > (boxWall.getFieldY() - boxWall.getColliderBounds())) {
@@ -247,7 +250,7 @@ public class Player extends GameObject
             return false;
         }
     }
-    
+
     public boolean weaponReady() {
         if ((int)System.currentTimeMillis() >= nextShotAvailable) {
             nextShotAvailable = (int) System.currentTimeMillis() + fireRate;
@@ -256,19 +259,19 @@ public class Player extends GameObject
             return false;
         }
     }
-    
+
     public void updateWeaponControl() {
         if (spreadCurrent > spreadMax) spreadCurrent = spreadMax;
         spreadCurrent += (int) Math.round((spreadMin - spreadCurrent) / spreadRecover);
     }
-    
+
     public void winLevel() {
         getWorld().getBackground().drawImage(new GreenfootImage("You win", 64, null, null), 550, 40);
         Greenfoot.delay(120);
         MainMenu menu = new MainMenu();
         Greenfoot.setWorld(menu);      
     }
-    
+
     public void updateEnemyVisibility(int range) {
         double checkRotationRadians = 0;
         List<NPC> npcs = getWorld().getObjects(NPC.class);
@@ -325,6 +328,17 @@ public class Player extends GameObject
                     }
                 }               
             }
+            System.out.println(getRotation() + " " + (rotationToNPC + 180));
+            if (rotationToNPC > 180 && getRotation() - 90 < 0) {
+                if ((getRotation() - 90) + (360 - rotationToNPC) > (FOV/2)) isVisible = false;
+            }
+            else if (rotationToNPC < 0 && getRotation() - 90 > 180) {
+                if ((rotationToNPC - 90) + (360 - getRotation()) > (FOV/2)) isVisible = false;
+            }
+            else if (getRotation() - 90 > rotationToNPC + (FOV/2) || getRotation() - 90 < rotationToNPC - (FOV/2)) {
+               isVisible = false;
+            }
+            
             npc.setVisible(isVisible);
         }
 

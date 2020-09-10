@@ -20,6 +20,7 @@ public class NPC extends GameObject
     private int difficulty;
 
     private int direction;
+    private int FOV;
 
     public NPC(int x, int y) {
         super(x,y);
@@ -31,6 +32,7 @@ public class NPC extends GameObject
         fireRate = 150;
         difficulty = 2;
         direction = 4;
+        FOV = 60;
     }
 
     public void act() 
@@ -188,6 +190,15 @@ public class NPC extends GameObject
                         return false;   
                     }
                 }
+                if (rotationToPlayer > 180 && getRotation() - 90 < 0) {
+                    if ((getRotation() - 90) + (360 - rotationToPlayer) > (FOV/2)) return false;
+                }
+                else if (rotationToPlayer < 0 && getRotation() - 90 > 180) {
+                    if ((rotationToPlayer - 90) + (360 - getRotation()) > (FOV/2)) return false;
+                }
+                else if (getRotation() - 90 > rotationToPlayer + (FOV/2) || getRotation() - 90 < rotationToPlayer - (FOV/2)) {
+                    return false;
+                }
                 return true;
             }
         }
@@ -248,7 +259,7 @@ public class NPC extends GameObject
             return false;
         }
     }
-    
+
     public void setVisible(boolean visible) {
         if (visible && health > 0) {
             getImage().setTransparency(255); 

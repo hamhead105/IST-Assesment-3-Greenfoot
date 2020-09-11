@@ -187,6 +187,8 @@ public class NPC extends GameObject
 
     public boolean findTarget(int range) {
         double checkRotationRadians = 0;
+        boolean isVisible = true;
+        hasSeenPlayer = true;
         List<Player> players = getWorld().getObjects(Player.class);
         Player player = null;
         if (players.size() > 0) {
@@ -230,96 +232,66 @@ public class NPC extends GameObject
                     //System.out.println("smallest: " + smallest + " | largest: " + largest + " | player: " + rotationToPlayer);
                     //TODO find shortest rotation instead of subtracting
 
-                    if (distanceToWall > distanceToPlayer) {
+                    if (distanceToWall < distanceToPlayer) {
                         System.out.println("B");
                         if (smallest < 0 && largest > 0) {
+                            //System.out.println("smallest: " + smallest + " largest: " + largest + " " + "caseB");
                             //System.out.println("cross 0");
                             if (smallest < -90) {
-                                if (rotationToPlayer < smallest && rotationToPlayer > -180 || rotationToPlayer > largest && rotationToPlayer <= 180) {
+                                if (rotationToPlayer < smallest && rotationToPlayer >= -180 || rotationToPlayer > largest && rotationToPlayer <= 180) {
+                                    //System.out.println("caseA");
                                     hasSeenPlayer = false;
-                                    return false;
+                                    isVisible = false;
                                 }
                             } else if (smallest > -90) {
-                                if (rotationToPlayer > smallest && rotationToPlayer < 0 || rotationToPlayer < largest && rotationToPlayer >= 0) {
+                                if (rotationToPlayer > smallest && rotationToPlayer <= 0 || rotationToPlayer < largest && rotationToPlayer >= 0) {
+                                    //System.out.println("caseB");
                                     hasSeenPlayer = false;
-                                    return false;
+                                    isVisible = false;
                                 }
                             }
                         }
-                        else if (rotationToPlayer > smallest && rotationToPlayer < largest) {
+                        else if (rotationToPlayer > smallest && rotationToPlayer < largest && distanceToWall < distanceToPlayer) {
+                            //System.out.println("caseC");
                             hasSeenPlayer = false;
-                            return false;   
+                            isVisible = false; 
                         }
+                    }
+                }               
 
-                        if (rotationToPlayer > 180 && getRotation() - 90 < 0) {
-                            if ((getRotation() - 90) + (360 - rotationToPlayer) > (FOV/2)) {
-                                hasSeenPlayer = false;
-                                return false; 
-                            }
-                        }
-                        else if (rotationToPlayer < 0 && getRotation() - 90 > 180) {
-                            if ((rotationToPlayer - 90) + (360 - getRotation()) > (FOV/2)) {
-                                hasSeenPlayer = false;
-                                return false;
-                            }
-                        }
-                        else if (getRotation() - 90 > rotationToPlayer + (FOV/2) || getRotation() - 90 < rotationToPlayer - (FOV/2)) {
-                            hasSeenPlayer = false;
-                            return false;
-                        }
-                        if (rotationToPlayer > 180 && getRotation() - 90 < 0) {
-                            if ((getRotation() - 90) + (360 - rotationToPlayer) > (FOV/2)) {
-                                hasSeenPlayer = false;
-                                return false;
-                            }
-                        }
-                        else if (rotationToPlayer < 0 && getRotation() - 90 > 180) {
-                            if ((rotationToPlayer - 90) + (360 - getRotation()) > (FOV/2)) {
-                                hasSeenPlayer = false;
-                                return false;
-                            }
-                        }
-                        else if (getRotation() - 90 > rotationToPlayer + (FOV/2) || getRotation() - 90 < rotationToPlayer - (FOV/2)) {
-                            hasSeenPlayer = false;
-                            return false;
-                        }
-                        else if (!hasSeenPlayer) {
-                            aimAtPlayer();
-                            hasSeenPlayer = true;
-                            reactionDue = currentTime+reactionTime;
-                            return false;
-                        }
-                        else if (hasSeenPlayer && currentTime > reactionDue) {
-                            aimAtPlayer();
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
-                    } else {
-                        System.out.println("A");
+                //System.out.println("myRotation " + getRotation() + " NPCrotation " + (rotationToPlayer));
+                if (rotationToPlayer > 180 && getRotation() - 90 < 0) {
+                    if ((getRotation() - 90) + (360 - rotationToPlayer) > (FOV/2)) {
+                        //System.out.println("case1");
                         hasSeenPlayer = false;
-                        return false;
+                        isVisible = false;
                     }
                 }
-            }
-
-            if (!hasSeenPlayer) {
-                aimAtPlayer();
-                hasSeenPlayer = true;
-                reactionDue = currentTime+reactionTime;
+                else if (rotationToPlayer < 0 && getRotation() - 90 > 180) {
+                    if ((rotationToPlayer - 90) + (360 - getRotation()) > (FOV/2)) {
+                        //System.out.println("case2");
+                        hasSeenPlayer = false;
+                        isVisible = false;
+                    }
+                }
+                else if (getRotation() - 90 > rotationToPlayer + (FOV/2) || getRotation() - 90 < rotationToPlayer - (FOV/2)) {
+                    //System.out.println("case3");
+                    hasSeenPlayer = false;
+                    isVisible = false;
+                }
+                if (hasSeenPlayer) {
+                    if (currentTime < reactionDue) {
+                        isVisible = false;
+                    }
+                } else {
+                    reactionDue = currentTime+reactionTime;
+                }
+                return isVisible;
+            } else {
                 return false;
             }
-            else if (hasSeenPlayer && currentTime > reactionDue) {
-                aimAtPlayer();
-                return true;
-            }
-            else {
-                return false;
-            }
-        } else {
-            return false;
-        }
+        } 
+        return false;
     }
 
     private boolean collisionCheck(int direction) {

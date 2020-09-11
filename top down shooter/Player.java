@@ -30,7 +30,7 @@ public class Player extends GameObject
     private boolean isReloading;
     private int reloadTime;
     private int gunType;
-    
+
     private int FOV;
 
     public Player(int x, int y) {
@@ -55,7 +55,7 @@ public class Player extends GameObject
         reloadFinishTime = System.currentTimeMillis(); 
         reloadTime = 3000;     
         gunType = 1;
-        FOV = 60;
+        FOV = 110;
     }
 
     public void act() 
@@ -315,30 +315,48 @@ public class Player extends GameObject
                     double distanceToWall = Math.sqrt((Math.pow(boxWall.getFieldX() - this.getFieldX(), 2) + (Math.pow(boxWall.getFieldY() - this.getFieldY(), 2))));
                     //System.out.println("smallest: " + smallest + " | largest: " + largest + " | player: " + rotationToPlayer);
                     //TODO find shortest rotation instead of subtracting
-                    if (smallest < 0 && largest > 0) {
-                        //System.out.println("cross 0");
-                        if (smallest < -90) {
-                            if (rotationToNPC < smallest && rotationToNPC > -180 || rotationToNPC > largest && rotationToNPC <= 180) isVisible = false;
-                        } else if (smallest > -90) {
-                            if (rotationToNPC > smallest && rotationToNPC < 0 || rotationToNPC < largest && rotationToNPC >= 0) isVisible = false;
+                    if (distanceToWall < distanceToNPC) {
+                        if (smallest < 0 && largest > 0) {
+                            //System.out.println("smallest: " + smallest + " largest: " + largest + " " + "caseB");
+                            //System.out.println("cross 0");
+                            if (smallest < -90) {
+                                if (rotationToNPC < smallest && rotationToNPC >= -180 || rotationToNPC > largest && rotationToNPC <= 180) {
+                                    //System.out.println("caseA");
+                                    isVisible = false;
+                                }
+                            } else if (smallest > -90) {
+                                if (rotationToNPC > smallest && rotationToNPC <= 0 || rotationToNPC < largest && rotationToNPC >= 0) {
+                                    //System.out.println("caseB");
+                                    isVisible = false;
+                                }
+                            }
                         }
-                    }
-                    else if (rotationToNPC > smallest && rotationToNPC < largest && distanceToWall < distanceToNPC) {
-                        isVisible = false; 
+                        else if (rotationToNPC > smallest && rotationToNPC < largest && distanceToWall < distanceToNPC) {
+                            //System.out.println("caseC");
+                            isVisible = false; 
+                        }
                     }
                 }               
             }
-            //System.out.println(getRotation() + " " + (rotationToNPC + 180));
+
+            //System.out.println("myRotation " + getRotation() + " NPCrotation " + (rotationToNPC));
             if (rotationToNPC > 180 && getRotation() - 90 < 0) {
-                if ((getRotation() - 90) + (360 - rotationToNPC) > (FOV/2)) isVisible = false;
+                if ((getRotation() - 90) + (360 - rotationToNPC) > (FOV/2)) {
+                    //System.out.println("case1");
+                    isVisible = false;
+                }
             }
             else if (rotationToNPC < 0 && getRotation() - 90 > 180) {
-                if ((rotationToNPC - 90) + (360 - getRotation()) > (FOV/2)) isVisible = false;
+                if ((rotationToNPC - 90) + (360 - getRotation()) > (FOV/2)) {
+                    //System.out.println("case2");
+                    isVisible = false;
+                }
             }
             else if (getRotation() - 90 > rotationToNPC + (FOV/2) || getRotation() - 90 < rotationToNPC - (FOV/2)) {
-               isVisible = false;
+                //System.out.println("case3");
+                isVisible = false;
             }
-            
+
             npc.setVisible(isVisible);
         }
 

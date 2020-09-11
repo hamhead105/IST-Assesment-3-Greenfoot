@@ -22,6 +22,11 @@ public class NPC extends GameObject
     private int direction;
     private int FOV;
 
+    private int reactionTime;
+    private long reactionDue;
+    private int turnSpeed;
+    private boolean hasSeenPlayer;
+
     public NPC(int x, int y) {
         super(x,y);
         shootSpread = 15;
@@ -32,9 +37,15 @@ public class NPC extends GameObject
         fireRate = 150;
         difficulty = 2;
         direction = 4;
-        FOV = 60;
-        
+        FOV = 120;
+        turnSpeed = 5;
         difficulty = GameSettings.getDifficulty();
+        if (difficulty == 1) {
+            reactionTime = 1000;
+        }
+        if (difficulty == 2) {
+            reactionTime = 400;
+        }
     }
 
     public void act() 
@@ -53,7 +64,11 @@ public class NPC extends GameObject
 
     public void runDifficultyEasy() {
         if (health >= 0) {
-            aimAtPlayer();
+            if (hasSeenPlayer) {
+                aimAtPlayer();
+            } else {
+                aimAtRotation(90);
+            }
             if (currentTime > nextShotDue) {
                 if (findTarget(300)) shoot();
                 nextShotDue = currentTime + fireRate;
@@ -64,7 +79,13 @@ public class NPC extends GameObject
     }
 
     public void runDifficultyMedium() {
+
         if (health >= 0) {
+            if (hasSeenPlayer) {
+                aimAtPlayer();
+            } else {
+                aimAtRotation(direction*90);
+            }
             if (Greenfoot.getRandomNumber(50) == 1) {
                 direction = Greenfoot.getRandomNumber(4) + 1;
             }
@@ -85,9 +106,11 @@ public class NPC extends GameObject
             } else {
                 direction = Greenfoot.getRandomNumber(4) + 1;
             }
-            aimAtPlayer();
+            //aimAtPlayer();
             if (currentTime > nextShotDue) {
-                if (findTarget(300)) shoot();
+                if (findTarget(300)) {                    
+                    shoot();
+                }
                 nextShotDue = currentTime + fireRate;
             }
         } else {
@@ -116,9 +139,35 @@ public class NPC extends GameObject
     public void aimAtPlayer() {
         List<Player> players = getWorld().getObjects(Player.class);
         if (players.size() > 0) {
+            int rotationForce;
+            // System.out.println (getRotation());
             Player player = players.get(0);
-            setRotation((int) Math.round (Math.toDegrees(Math.atan2(player.getFieldY() - this.getFieldY(), player.getFieldX() - this.getFieldX()))) + 90);
+            int targetRotation = (int) Math.round (Math.toDegrees(Math.atan2(player.getFieldY() - this.getFieldY(), player.getFieldX() - this.getFieldX()))) + 90;
+            rotationForce = (targetRotation - getRotation()) / turnSpeed;
+
+            if (getRotation() > 270 && targetRotation < 90) {
+                rotationForce = (targetRotation + 360 - getRotation()) / turnSpeed;
+            }
+            if (getRotation() < 90 && targetRotation > 270) {
+                rotationForce = -(getRotation() + 360 - targetRotation) / turnSpeed;
+            }
+
+            setRotation(getRotation() + rotationForce);
         }
+    }
+
+    public void aimAtRotation(int rotation) {
+        int rotationForce;
+        int targetRotation = rotation - 90;
+        rotationForce = (targetRotation - getRotation()) / turnSpeed;
+        if (getRotation() > 270 && targetRotation < 90) {
+            rotationForce = (targetRotation + 360 - getRotation()) / turnSpeed;
+        }
+        if (getRotation() < 90 && targetRotation > 270) {
+            rotationForce = -(getRotation() + 360 - targetRotation) / turnSpeed;
+        }
+        setRotation(getRotation() + rotationForce);
+
     }
 
     public void shoot() {
@@ -132,7 +181,7 @@ public class NPC extends GameObject
         int worldXOffset = (int) Math.round(Math.cos(Math.toRadians(alpha)) * h);
         int worldYOffset = (int) Math.round(Math.sin(Math.toRadians(alpha)) * h);
 
-        Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + shootSpread / 2 - Greenfoot.getRandomNumber(shootSpread) , 50, 40, 1);
+        Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + shootSpread / 2 - Greenfoot.getRandomNumber(shootSpread) , 50, 40, 15);
         getWorld().addObject(bullet, 0, 0);
     }
 
@@ -180,31 +229,97 @@ public class NPC extends GameObject
                     double distanceToWall = Math.sqrt((Math.pow(boxWall.getFieldX() - this.getFieldX(), 2) + (Math.pow(boxWall.getFieldY() - this.getFieldY(), 2))));
                     //System.out.println("smallest: " + smallest + " | largest: " + largest + " | player: " + rotationToPlayer);
                     //TODO find shortest rotation instead of subtracting
-                    if (smallest < 0 && largest > 0) {
-                        //System.out.println("cross 0");
-                        if (smallest < -90) {
-                            if (rotationToPlayer < smallest && rotationToPlayer > -180 || rotationToPlayer > largest && rotationToPlayer <= 180) return false;
-                        } else if (smallest > -90) {
-                            if (rotationToPlayer > smallest && rotationToPlayer < 0 || rotationToPlayer < largest && rotationToPlayer >= 0) return false;
+
+                    if (distanceToWall > distanceToPlayer) {
+                        System.out.println("B");
+                        if (smallest < 0 && largest > 0) {
+                            //System.out.println("cross 0");
+                            if (smallest < -90) {
+                                if (rotationToPlayer < smallest && rotationToPlayer > -180 || rotationToPlayer > largest && rotationToPlayer <= 180) {
+                                    hasSeenPlayer = false;
+                                    return false;
+                                }
+                            } else if (smallest > -90) {
+                                if (rotationToPlayer > smallest && rotationToPlayer < 0 || rotationToPlayer < largest && rotationToPlayer >= 0) {
+                                    hasSeenPlayer = false;
+                                    return false;
+                                }
+                            }
                         }
+                        else if (rotationToPlayer > smallest && rotationToPlayer < largest) {
+                            hasSeenPlayer = false;
+                            return false;   
+                        }
+
+                        if (rotationToPlayer > 180 && getRotation() - 90 < 0) {
+                            if ((getRotation() - 90) + (360 - rotationToPlayer) > (FOV/2)) {
+                                hasSeenPlayer = false;
+                                return false; 
+                            }
+                        }
+                        else if (rotationToPlayer < 0 && getRotation() - 90 > 180) {
+                            if ((rotationToPlayer - 90) + (360 - getRotation()) > (FOV/2)) {
+                                hasSeenPlayer = false;
+                                return false;
+                            }
+                        }
+                        else if (getRotation() - 90 > rotationToPlayer + (FOV/2) || getRotation() - 90 < rotationToPlayer - (FOV/2)) {
+                            hasSeenPlayer = false;
+                            return false;
+                        }
+                        if (rotationToPlayer > 180 && getRotation() - 90 < 0) {
+                            if ((getRotation() - 90) + (360 - rotationToPlayer) > (FOV/2)) {
+                                hasSeenPlayer = false;
+                                return false;
+                            }
+                        }
+                        else if (rotationToPlayer < 0 && getRotation() - 90 > 180) {
+                            if ((rotationToPlayer - 90) + (360 - getRotation()) > (FOV/2)) {
+                                hasSeenPlayer = false;
+                                return false;
+                            }
+                        }
+                        else if (getRotation() - 90 > rotationToPlayer + (FOV/2) || getRotation() - 90 < rotationToPlayer - (FOV/2)) {
+                            hasSeenPlayer = false;
+                            return false;
+                        }
+                        else if (!hasSeenPlayer) {
+                            aimAtPlayer();
+                            hasSeenPlayer = true;
+                            reactionDue = currentTime+reactionTime;
+                            return false;
+                        }
+                        else if (hasSeenPlayer && currentTime > reactionDue) {
+                            aimAtPlayer();
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
+                    } else {
+                        System.out.println("A");
+                        hasSeenPlayer = false;
+                        return false;
                     }
-                    else if (rotationToPlayer > smallest && rotationToPlayer < largest && distanceToWall < distanceToPlayer) {
-                        return false;   
-                    }
                 }
-                if (rotationToPlayer > 180 && getRotation() - 90 < 0) {
-                    if ((getRotation() - 90) + (360 - rotationToPlayer) > (FOV/2)) return false;
-                }
-                else if (rotationToPlayer < 0 && getRotation() - 90 > 180) {
-                    if ((rotationToPlayer - 90) + (360 - getRotation()) > (FOV/2)) return false;
-                }
-                else if (getRotation() - 90 > rotationToPlayer + (FOV/2) || getRotation() - 90 < rotationToPlayer - (FOV/2)) {
-                    return false;
-                }
+            }
+
+            if (!hasSeenPlayer) {
+                aimAtPlayer();
+                hasSeenPlayer = true;
+                reactionDue = currentTime+reactionTime;
+                return false;
+            }
+            else if (hasSeenPlayer && currentTime > reactionDue) {
+                aimAtPlayer();
                 return true;
             }
+            else {
+                return false;
+            }
+        } else {
+            return false;
         }
-        return true;
     }
 
     private boolean collisionCheck(int direction) {
@@ -266,7 +381,7 @@ public class NPC extends GameObject
         if (visible && health > 0) {
             getImage().setTransparency(255); 
         } else if (health > 0) {
-            getImage().setTransparency(4); 
+            getImage().setTransparency(getImage().getTransparency() - ((int) Math.ceil(getImage().getTransparency())) / 5);
         }
     }
 }

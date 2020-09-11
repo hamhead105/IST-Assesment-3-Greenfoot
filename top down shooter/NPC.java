@@ -26,6 +26,7 @@ public class NPC extends GameObject
     private long reactionDue;
     private int turnSpeed;
     private boolean hasSeenPlayer;
+    private long relaxTime;
 
     public NPC(int x, int y) {
         super(x,y);
@@ -66,7 +67,7 @@ public class NPC extends GameObject
         if (health >= 0) {
             if (hasSeenPlayer) {
                 aimAtPlayer();
-            } else {
+            } else if (currentTime > relaxTime){
                 aimAtRotation(90);
             }
             if (currentTime > nextShotDue) {
@@ -83,7 +84,7 @@ public class NPC extends GameObject
         if (health >= 0) {
             if (hasSeenPlayer) {
                 aimAtPlayer();
-            } else {
+            } else if (currentTime > relaxTime) {
                 aimAtRotation(direction*90);
             }
             if (Greenfoot.getRandomNumber(50) == 1) {
@@ -233,7 +234,7 @@ public class NPC extends GameObject
                     //TODO find shortest rotation instead of subtracting
 
                     if (distanceToWall < distanceToPlayer) {
-                        System.out.println("B");
+                        //System.out.println("B");
                         if (smallest < 0 && largest > 0) {
                             //System.out.println("smallest: " + smallest + " largest: " + largest + " " + "caseB");
                             //System.out.println("cross 0");
@@ -283,7 +284,8 @@ public class NPC extends GameObject
                     if (currentTime < reactionDue) {
                         isVisible = false;
                     }
-                } else {
+                    relaxTime = currentTime+4000;
+                } else {                   
                     reactionDue = currentTime+reactionTime;
                 }
                 return isVisible;

@@ -27,6 +27,8 @@ public class NPC extends GameObject
     private int turnSpeed;
     private boolean hasSeenPlayer;
     private long relaxTime;
+    
+    private int damage;
 
     public NPC(int x, int y) {
         super(x,y);
@@ -43,9 +45,11 @@ public class NPC extends GameObject
         difficulty = GameSettings.getDifficulty();
         if (difficulty == 1) {
             reactionTime = 1000;
+            damage = 10;
         }
         if (difficulty == 2) {
             reactionTime = 400;
+            damage = 30;
         }
     }
 
@@ -182,7 +186,7 @@ public class NPC extends GameObject
         int worldXOffset = (int) Math.round(Math.cos(Math.toRadians(alpha)) * h);
         int worldYOffset = (int) Math.round(Math.sin(Math.toRadians(alpha)) * h);
 
-        Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + shootSpread / 2 - Greenfoot.getRandomNumber(shootSpread) , 50, 40, 15);
+        Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + shootSpread / 2 - Greenfoot.getRandomNumber(shootSpread) , 50, 40, damage);
         getWorld().addObject(bullet, 0, 0);
     }
 
@@ -357,5 +361,9 @@ public class NPC extends GameObject
         } else if (health > 0) {
             getImage().setTransparency(getImage().getTransparency() - ((int) Math.ceil(getImage().getTransparency())) / 5);
         }
+    }
+    
+    public void addRelaxTime(int time) {
+        relaxTime = currentTime + time;
     }
 }

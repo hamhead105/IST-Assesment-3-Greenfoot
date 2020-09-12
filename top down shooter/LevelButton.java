@@ -18,7 +18,7 @@ public class LevelButton extends Button
     public void act() 
     {
         MouseInfo mouseInfo = Greenfoot.getMouseInfo();
-        if (Greenfoot.mouseClicked(null)) {
+        if (Greenfoot.mouseClicked(null) && mouseInfo != null) {
             if (wasClicked(mouseInfo.getX(), mouseInfo.getY())) {
                 loadMyLevel();
             }

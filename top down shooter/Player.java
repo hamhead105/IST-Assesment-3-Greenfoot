@@ -44,8 +44,8 @@ public class Player extends GameObject
         nextShotAvailable = (int) System.currentTimeMillis();
 
         spreadMin = 1;
-        spreadMax = 15;
-        spreadShotGain = 10; 
+        spreadMax = 40;
+        spreadShotGain = 15; 
         spreadRecover = 8;
         spreadCurrent = spreadMin;
 
@@ -157,9 +157,18 @@ public class Player extends GameObject
         int worldXOffset = (int) Math.round(Math.cos(Math.toRadians(alpha)) * h);
         int worldYOffset = (int) Math.round(Math.sin(Math.toRadians(alpha)) * h);
 
-        Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + ((spreadCurrent / 2) - Greenfoot.getRandomNumber(spreadCurrent)), 50, 40, 20);
+        Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + ((spreadCurrent / 2) - Greenfoot.getRandomNumber(spreadCurrent)), 50, 40, 40);
         getWorld().addObject(bullet, 0, 0);
         spreadCurrent += spreadShotGain;
+        if (gunType == 1) {
+            List<NPC> npcs = getWorld().getObjects(NPC.class);
+            for (NPC npc : npcs) {
+                npc.aimAtRotation((int) Math.toDegrees(Math.atan2(this.getFieldY() - npc.getFieldY(), this.getFieldX() - npc.getFieldX())) + 180);
+                npc.addRelaxTime(200);
+            }
+            
+        }
+        
     }
 
     public void hit(int damage) {

@@ -16,7 +16,7 @@ public class ClassButton extends Button
     }
     
     public void act() {
-        GameSettings.setDifficulty(playerClass);
+        GameSettings.setPlayerClass(playerClass);
         MouseInfo mouseInfo = Greenfoot.getMouseInfo();
         if (Greenfoot.mouseClicked(null)) {
             if (wasClicked(mouseInfo.getX(), mouseInfo.getY())) {

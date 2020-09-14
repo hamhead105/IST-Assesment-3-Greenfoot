@@ -27,8 +27,9 @@ public class NPC extends GameObject
     private int turnSpeed;
     private boolean hasSeenPlayer;
     private long relaxTime;
-    
+
     private int damage;
+    private boolean alerted;
 
     public NPC(int x, int y) {
         super(x,y);
@@ -84,10 +85,12 @@ public class NPC extends GameObject
     }
 
     public void runDifficultyMedium() {
-
         if (health >= 0) {
-            if (hasSeenPlayer) {
+            if (hasSeenPlayer || alerted) {
                 aimAtPlayer();
+                if (currentTime > relaxTime) {
+                    alerted = false;
+                }
             } else if (currentTime > relaxTime) {
                 aimAtRotation(direction*90);
             }
@@ -117,6 +120,7 @@ public class NPC extends GameObject
                     shoot();
                 }
                 nextShotDue = currentTime + fireRate;
+
             }
         } else {
             fadeAway();
@@ -164,6 +168,7 @@ public class NPC extends GameObject
     public void aimAtRotation(int rotation) {
         int rotationForce;
         int targetRotation = rotation - 90;
+        //while (getRotation() <= targetRotation - 2 || getRotation() >= targetRotation + 2) { 
         rotationForce = (targetRotation - getRotation()) / turnSpeed;
         if (getRotation() > 270 && targetRotation < 90) {
             rotationForce = (targetRotation + 360 - getRotation()) / turnSpeed;
@@ -172,6 +177,7 @@ public class NPC extends GameObject
             rotationForce = -(getRotation() + 360 - targetRotation) / turnSpeed;
         }
         setRotation(getRotation() + rotationForce);
+        // }
 
     }
 
@@ -362,8 +368,13 @@ public class NPC extends GameObject
             getImage().setTransparency(getImage().getTransparency() - ((int) Math.ceil(getImage().getTransparency())) / 5);
         }
     }
-    
+
     public void addRelaxTime(int time) {
         relaxTime = currentTime + time;
+    }
+
+    public void alert() {
+        alerted = true;
+        relaxTime = currentTime + 1000;
     }
 }

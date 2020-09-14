@@ -163,8 +163,7 @@ public class Player extends GameObject
         if (gunType == 1) {
             List<NPC> npcs = getWorld().getObjects(NPC.class);
             for (NPC npc : npcs) {
-                npc.aimAtRotation((int) Math.toDegrees(Math.atan2(this.getFieldY() - npc.getFieldY(), this.getFieldX() - npc.getFieldX())) + 180);
-                npc.addRelaxTime(200);
+                npc.alert();               
             }
             
         }

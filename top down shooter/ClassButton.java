@@ -6,33 +6,30 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class DifficultyButton extends Button
+public class ClassButton extends Button
 {
-    private int difficulty;
+    private int playerClass;
     
-    public DifficultyButton() {
+    public ClassButton() {
         super(400, 100, 0, -50);
-        difficulty = 2;
+        playerClass = 1;
     }
     
     public void act() {
-        GameSettings.setDifficulty(difficulty);
+        GameSettings.setDifficulty(playerClass);
         MouseInfo mouseInfo = Greenfoot.getMouseInfo();
         if (Greenfoot.mouseClicked(null)) {
             if (wasClicked(mouseInfo.getX(), mouseInfo.getY())) {
-                cycleDifficulty();
+                cycleClass();
             }
         }  
-        String difficultyName = "";
-        switch(difficulty) {
+        String className = "";
+        switch(playerClass) {
             case 1:
-            difficultyName = "Easy";
+            className = "Assault";
             break;
             case 2:
-            difficultyName = "Medium";
-            break;
-            case 3:
-            difficultyName = "Hard";
+            className = "Recon";
             break;
         }
         GreenfootImage image = new GreenfootImage(1200, 1200);
@@ -41,12 +38,12 @@ public class DifficultyButton extends Button
         image.setColor(Color.WHITE);
         image.fillRect(400, 600, 400, 100);
        
-        image.drawImage(new GreenfootImage("Difficulty: " + difficultyName, 40, null, null), 440, 630);
+        image.drawImage(new GreenfootImage("Class: " + className, 40, null, null), 440, 630);
         setImage(image);
     }
     
-    public void cycleDifficulty() {
-        difficulty++;
-        if (difficulty > 3) difficulty = 1;
+    public void cycleClass() {
+        playerClass++;
+        if (playerClass > 2) playerClass = 1;
     }
 }

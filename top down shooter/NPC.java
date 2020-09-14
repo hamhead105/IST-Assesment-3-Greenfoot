@@ -44,13 +44,16 @@ public class NPC extends GameObject
         FOV = 120;
         turnSpeed = 5;
         difficulty = GameSettings.getDifficulty();
-        if (difficulty == 1) {
-            reactionTime = 1000;
-            damage = 10;
-        }
-        if (difficulty == 2) {
-            reactionTime = 400;
-            damage = 30;
+        switch (difficulty) {
+            case 1:
+                reactionTime = 1000;
+                damage = 10;
+                break;
+            case 2:
+                reactionTime = 500;
+                damage = 30;
+                break;
+
         }
     }
 

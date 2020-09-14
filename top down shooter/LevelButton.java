@@ -10,7 +10,7 @@ public class LevelButton extends Button
 {
     private int level;
     public LevelButton(int level) {
-        super(200, 100);
+        super(200, 100, 0, 0);
         this.level = level;
         setImage(new GreenfootImage("level" + level + ".png"));
     }

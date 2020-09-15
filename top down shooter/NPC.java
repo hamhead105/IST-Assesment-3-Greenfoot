@@ -46,13 +46,16 @@ public class NPC extends GameObject
         difficulty = GameSettings.getDifficulty();
         switch (difficulty) {
             case 1:
-                reactionTime = 1000;
-                damage = 10;
-                break;
+            reactionTime = 1000;
+            damage = 0;
+            break;
             case 2:
-                reactionTime = 500;
-                damage = 30;
-                break;
+            reactionTime = 500;
+            damage = 0;
+            case 3:
+            reactionTime = 1000;
+            damage = 0;
+            break;
 
         }
     }
@@ -67,6 +70,9 @@ public class NPC extends GameObject
             break;
             case 2:
             runDifficultyMedium();
+            break;
+            case 3:
+            runDifficultyHard();
             break;
         }
     }
@@ -130,6 +136,34 @@ public class NPC extends GameObject
         }
     }
 
+    public void runDifficultyHard() {
+        if (health >= 0) {
+            aimAtRotation(direction*90);
+            if (Greenfoot.getRandomNumber(50) == 1) {
+                direction = Greenfoot.getRandomNumber(4) + 1;
+            }
+            //System.out.println(direction);
+            if (!collisionCheck(direction)) {
+                if (direction == 1) {
+                    moveY(-speed);
+                }
+                if (direction == 2) {
+                    moveX(speed);
+                }
+                if (direction == 3) {
+                    moveY(speed);
+                }
+                if (direction == 4) {
+                    moveX(-speed);
+                }
+            } else {
+                direction = Greenfoot.getRandomNumber(4) + 1;
+            }
+        } else {
+            fadeAway();
+        }
+    }
+
     public void hit(int damage) {
         health -= damage;
         getImage().setColor(Color.RED);
@@ -152,35 +186,45 @@ public class NPC extends GameObject
         List<Player> players = getWorld().getObjects(Player.class);
         if (players.size() > 0) {
             int rotationForce;
-            // System.out.println (getRotation());
             Player player = players.get(0);
-            int targetRotation = (int) Math.round (Math.toDegrees(Math.atan2(player.getFieldY() - this.getFieldY(), player.getFieldX() - this.getFieldX()))) + 90;
-            rotationForce = (targetRotation - getRotation()) / turnSpeed;
-
-            if (getRotation() > 270 && targetRotation < 90) {
-                rotationForce = (targetRotation + 360 - getRotation()) / turnSpeed;
+            int targetRotation = (int) Math.round (Math.toDegrees(Math.atan2(player.getFieldY() - this.getFieldY(), player.getFieldX() - this.getFieldX())) + 180);   
+            int currentRotation = getRotation() + 90;
+            if (currentRotation > 360) {
+                currentRotation = currentRotation - 360;
             }
-            if (getRotation() < 90 && targetRotation > 270) {
-                rotationForce = -(getRotation() + 360 - targetRotation) / turnSpeed;
+            if (currentRotation > 270 && targetRotation < 90) {
+                rotationForce = (targetRotation + 360 - currentRotation) / turnSpeed;
+            }
+            if (currentRotation < 90 && targetRotation > 270) {
+                rotationForce = (-currentRotation + -(360 - targetRotation)) / turnSpeed;
+            } else {
+                rotationForce = (targetRotation - currentRotation) / turnSpeed;
             }
 
+            //System.out.println (currentRotation + " " + targetRotation);
             setRotation(getRotation() + rotationForce);
         }
     }
 
     public void aimAtRotation(int rotation) {
         int rotationForce;
-        int targetRotation = rotation - 90;
-        //while (getRotation() <= targetRotation - 2 || getRotation() >= targetRotation + 2) { 
-        rotationForce = (targetRotation - getRotation()) / turnSpeed;
-        if (getRotation() > 270 && targetRotation < 90) {
-            rotationForce = (targetRotation + 360 - getRotation()) / turnSpeed;
+        int targetRotation = rotation;   
+        int currentRotation = getRotation() + 90;
+        if (currentRotation > 360) {
+            currentRotation = currentRotation - 360;
         }
-        if (getRotation() < 90 && targetRotation > 270) {
-            rotationForce = -(getRotation() + 360 - targetRotation) / turnSpeed;
+
+        if (currentRotation > 270 && targetRotation < 90) {
+            rotationForce = (targetRotation + 360 - currentRotation) / turnSpeed;
         }
+        if (currentRotation < 90 && targetRotation > 270) {
+            rotationForce = (-currentRotation + -(360 - targetRotation)) / turnSpeed;
+        } else {
+            rotationForce = (targetRotation - currentRotation) / turnSpeed;
+        }
+
+        //System.out.println (currentRotation + " " + targetRotation);
         setRotation(getRotation() + rotationForce);
-        // }
 
     }
 

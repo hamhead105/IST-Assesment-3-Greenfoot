@@ -33,6 +33,7 @@ public class Player extends GameObject
 
     private int FOV;
     private int damage;
+    private static int score;
 
     public Player(int x, int y) {
         super(x,y);
@@ -92,7 +93,7 @@ public class Player extends GameObject
     public void act() 
     {        
         if (health >= 0) {          
-            System.out.println(spreadCurrent);
+            //System.out.println(spreadCurrent);
             MouseInfo mouseInfo = Greenfoot.getMouseInfo();
 
             if (Greenfoot.isKeyDown("W") && !collisionCheck(1)) {
@@ -231,10 +232,9 @@ public class Player extends GameObject
         getImage().setTransparency(getImage().getTransparency() - 30);
         if (getImage().getTransparency() <= 30) {
             //getWorld().removeObject(this);
-            getWorld().getBackground().drawImage(new GreenfootImage("You Lost", 64, null, null), 550, 40);
-            Greenfoot.delay(120);
-            MainMenu menu = new MainMenu();
-            Greenfoot.setWorld(menu);      
+            Greenfoot.delay(25);
+            GameEndScreen gameEnd = new GameEndScreen(false, score);
+            Greenfoot.setWorld(gameEnd);      
         }
     }
 
@@ -308,10 +308,9 @@ public class Player extends GameObject
     }
 
     public void winLevel() {
-        getWorld().getBackground().drawImage(new GreenfootImage("You win", 64, null, null), 550, 40);
         Greenfoot.delay(120);
-        MainMenu menu = new MainMenu();
-        Greenfoot.setWorld(menu);      
+        GameEndScreen gameEnd = new GameEndScreen(true, score);
+        Greenfoot.setWorld(gameEnd); 
     }
 
     public void updateEnemyVisibility(int range) {

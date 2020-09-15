@@ -47,14 +47,14 @@ public class NPC extends GameObject
         switch (difficulty) {
             case 1:
             reactionTime = 1000;
-            damage = 0;
+            damage = 10;
             break;
             case 2:
             reactionTime = 500;
-            damage = 0;
+            damage = 25;
             case 3:
             reactionTime = 1000;
-            damage = 0;
+            damage = 40;
             break;
 
         }

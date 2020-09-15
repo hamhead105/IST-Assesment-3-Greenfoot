@@ -18,11 +18,11 @@ public class Player extends GameObject
     private int nextShotAvailable;
 
     //gun stats
-    private int spreadCurrent;
-    private int spreadMin;
-    private int spreadMax;
-    private int spreadShotGain;
-    private int spreadRecover;
+    private double spreadCurrent;
+    private double spreadMin;
+    private double spreadMax;
+    private double spreadShotGain;
+    private double spreadRecover;
 
     private int maxAmmo;
     private int currentAmmo;
@@ -32,35 +32,67 @@ public class Player extends GameObject
     private int gunType;
 
     private int FOV;
+    private int damage;
 
     public Player(int x, int y) {
         super(x,y);
-        GreenfootImage image = getImage();
-        image.scale(240,200);
-        speed = 2;
-        cameraBias = 0.35;
-        health = 100;
-        fireRate = 120;
         nextShotAvailable = (int) System.currentTimeMillis();
-
-        spreadMin = 1;
-        spreadMax = 40;
-        spreadShotGain = 15; 
-        spreadRecover = 8;
-        spreadCurrent = spreadMin;
-
-        isReloading = false;        
-        maxAmmo = 30;
-        currentAmmo = maxAmmo;
         reloadFinishTime = System.currentTimeMillis(); 
-        reloadTime = 3000;     
-        gunType = 1;
-        FOV = 110;
+
+        switch (GameSettings.getPlayerClass()) {
+            case 1:
+                GreenfootImage image = new GreenfootImage("combatant1.png");
+                image.scale(240,200);
+                setImage(image);
+                speed = 2;
+                cameraBias = 0.35;
+                health = 100;
+                fireRate = 100;
+                spreadMin = 1;
+                spreadMax = 120;
+                spreadShotGain = 30; 
+                spreadRecover = 5;
+                spreadCurrent = spreadMin;
+    
+                isReloading = false;        
+                maxAmmo = 30;
+                currentAmmo = maxAmmo;
+    
+                reloadTime = 3000;     
+                gunType = 1;
+                FOV = 110;
+                damage = 20;
+            break;
+            case 2:
+                GreenfootImage image2 = new GreenfootImage("combatant4.png");
+                image2.scale(240,200);
+                setImage(image2);
+                speed = 2;
+                cameraBias = 0.5;
+                health = 60;
+                fireRate = 220;
+                spreadMin = 1;
+                spreadMax = 120;
+                spreadShotGain = 70; 
+                spreadRecover = 15;
+                spreadCurrent = spreadMin;
+    
+                isReloading = false;        
+                maxAmmo = 12;
+                currentAmmo = maxAmmo;
+    
+                reloadTime = 3000;     
+                gunType = 2;
+                FOV = 110;
+                damage = 40;
+            break;            
+        }
     }
 
     public void act() 
     {        
-        if (health >= 0) {           
+        if (health >= 0) {          
+            System.out.println(spreadCurrent);
             MouseInfo mouseInfo = Greenfoot.getMouseInfo();
 
             if (Greenfoot.isKeyDown("W") && !collisionCheck(1)) {
@@ -145,7 +177,11 @@ public class Player extends GameObject
     }
 
     public void shoot() {
-        Greenfoot.playSound("HK416.mp3");
+        if (gunType == 1) {
+            Greenfoot.playSound("M4 Sounds.mp3");
+        } else if (gunType == 2) {
+            Greenfoot.playSound("Suppressed Mk14.mp3");
+        }
         currentAmmo--;
         updateAmmoCount();
         int barrelXOffset = 16;
@@ -157,7 +193,7 @@ public class Player extends GameObject
         int worldXOffset = (int) Math.round(Math.cos(Math.toRadians(alpha)) * h);
         int worldYOffset = (int) Math.round(Math.sin(Math.toRadians(alpha)) * h);
 
-        Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + ((spreadCurrent / 2) - Greenfoot.getRandomNumber(spreadCurrent)), 50, 40, 40);
+        Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + (int) ((spreadCurrent / 2) - Greenfoot.getRandomNumber((int) Math.round(spreadCurrent))), 50, 40, damage);
         getWorld().addObject(bullet, 0, 0);
         spreadCurrent += spreadShotGain;
         if (gunType == 1) {
@@ -165,9 +201,7 @@ public class Player extends GameObject
             for (NPC npc : npcs) {
                 npc.alert();               
             }
-            
         }
-        
     }
 
     public void hit(int damage) {
@@ -270,7 +304,7 @@ public class Player extends GameObject
 
     public void updateWeaponControl() {
         if (spreadCurrent > spreadMax) spreadCurrent = spreadMax;
-        spreadCurrent += (int) Math.round((spreadMin - spreadCurrent) / spreadRecover);
+        spreadCurrent += (spreadMin - spreadCurrent) / spreadRecover;
     }
 
     public void winLevel() {

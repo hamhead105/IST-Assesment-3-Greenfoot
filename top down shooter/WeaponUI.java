@@ -32,6 +32,11 @@ public class WeaponUI extends Actor
             gunIcon.scale(150,60);
             //gunIcon.setImage();
         }
+        if (gunType == 2) {
+            gunIcon = new GreenfootImage("M4 icon.jpg");
+            gunIcon.scale(150,60);
+            //gunIcon.setImage();
+        }
         image.drawImage(gunIcon, 980, 750);
         setImage(image);
     }

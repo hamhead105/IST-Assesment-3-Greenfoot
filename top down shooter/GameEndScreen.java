@@ -22,7 +22,7 @@ public class GameEndScreen extends World
         } else {
             getBackground().drawImage(new GreenfootImage("You Lost", 64, null, null), 480, 40);
         }
-        getBackground().drawImage(new GreenfootImage("Score: " + score, 32, null, null), 550, 120);
+        getBackground().drawImage(new GreenfootImage("Score: " + GameSettings.getCurrentScore(), 32, null, null), 535, 120);
         ReturnButton returnButton = new ReturnButton();
         addObject(returnButton, 600, 350);
 

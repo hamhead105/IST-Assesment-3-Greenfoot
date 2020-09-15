@@ -32,6 +32,8 @@ public class Level extends World
         addObject(healthBar, 600, 400);
         WeaponUI weaponUI = new WeaponUI();
         addObject(weaponUI, 600, 400);
+        Scoreboard scoreBoard = new Scoreboard();
+        addObject(scoreBoard, 300, -120);
     }
     
     public void createLevel() {

@@ -34,58 +34,60 @@ public class Player extends GameObject
     private int FOV;
     private int damage;
     private static int score;
+    private int checkFrame;
 
     public Player(int x, int y) {
         super(x,y);
+        GameSettings.setCurrentScore(0);
         nextShotAvailable = (int) System.currentTimeMillis();
         reloadFinishTime = System.currentTimeMillis(); 
 
         switch (GameSettings.getPlayerClass()) {
             case 1:
-                GreenfootImage image = new GreenfootImage("combatant1.png");
-                image.scale(240,200);
-                setImage(image);
-                speed = 2;
-                cameraBias = 0.35;
-                health = 100;
-                fireRate = 100;
-                spreadMin = 1;
-                spreadMax = 120;
-                spreadShotGain = 30; 
-                spreadRecover = 5;
-                spreadCurrent = spreadMin;
-    
-                isReloading = false;        
-                maxAmmo = 30;
-                currentAmmo = maxAmmo;
-    
-                reloadTime = 3000;     
-                gunType = 1;
-                FOV = 110;
-                damage = 20;
+            GreenfootImage image = new GreenfootImage("combatant1.png");
+            image.scale(240,200);
+            setImage(image);
+            speed = 2;
+            cameraBias = 0.35;
+            health = 100;
+            fireRate = 100;
+            spreadMin = 1;
+            spreadMax = 120;
+            spreadShotGain = 30; 
+            spreadRecover = 5;
+            spreadCurrent = spreadMin;
+
+            isReloading = false;        
+            maxAmmo = 30;
+            currentAmmo = maxAmmo;
+
+            reloadTime = 3000;     
+            gunType = 1;
+            FOV = 110;
+            damage = 20;
             break;
             case 2:
-                GreenfootImage image2 = new GreenfootImage("combatant4.png");
-                image2.scale(240,200);
-                setImage(image2);
-                speed = 2;
-                cameraBias = 0.5;
-                health = 60;
-                fireRate = 220;
-                spreadMin = 1;
-                spreadMax = 120;
-                spreadShotGain = 70; 
-                spreadRecover = 15;
-                spreadCurrent = spreadMin;
-    
-                isReloading = false;        
-                maxAmmo = 12;
-                currentAmmo = maxAmmo;
-    
-                reloadTime = 3000;     
-                gunType = 2;
-                FOV = 110;
-                damage = 40;
+            GreenfootImage image2 = new GreenfootImage("combatant4.png");
+            image2.scale(240,200);
+            setImage(image2);
+            speed = 2;
+            cameraBias = 0.5;
+            health = 60;
+            fireRate = 220;
+            spreadMin = 1;
+            spreadMax = 120;
+            spreadShotGain = 70; 
+            spreadRecover = 15;
+            spreadCurrent = spreadMin;
+
+            isReloading = false;        
+            maxAmmo = 12;
+            currentAmmo = maxAmmo;
+
+            reloadTime = 3000;     
+            gunType = 2;
+            FOV = 110;
+            damage = 40;
             break;            
         }
     }
@@ -142,16 +144,22 @@ public class Player extends GameObject
         } else {
             fadeAway();
         }
+        checkFrame++;
+        if (checkFrame >= 5) {
+            checkFrame = 1;
+        }
         updateLocation();
         updateWeaponControl();    
         updateAmmoCount();
         updateHealthBar();
-        updateEnemyVisibility(100);
-        List<Flag> flags = getWorld().getObjects(Flag.class);
-        for (Flag flag : flags) {
-            if (Math.sqrt(Math.pow(flag.getFieldX() - this.getFieldX(), 2) + Math.pow(flag.getFieldY() - this.getFieldY(), 2)) <= 100) {
-                winLevel();
-            }      
+        if (checkFrame == 1) {
+            updateEnemyVisibility(100);
+            List<Flag> flags = getWorld().getObjects(Flag.class);
+            for (Flag flag : flags) {
+                if (Math.sqrt(Math.pow(flag.getFieldX() - this.getFieldX(), 2) + Math.pow(flag.getFieldY() - this.getFieldY(), 2)) <= 100) {
+                    winLevel();
+                }      
+            }
         }
     }
 
@@ -400,6 +408,13 @@ public class Player extends GameObject
 
             npc.setVisible(isVisible);
         }
+    }
 
+    public static int getScore() {
+        return score;
+    }
+
+    public static void addScore(int points) {
+        score += points;
     }
 }

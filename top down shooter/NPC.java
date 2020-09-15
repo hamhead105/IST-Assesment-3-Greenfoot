@@ -30,6 +30,7 @@ public class NPC extends GameObject
 
     private int damage;
     private boolean alerted;
+    private int checkFrame = 0;
 
     public NPC(int x, int y) {
         super(x,y);
@@ -75,6 +76,8 @@ public class NPC extends GameObject
             runDifficultyHard();
             break;
         }
+        checkFrame++;
+        if (checkFrame == 10) checkFrame = 1;
     }
 
     public void runDifficultyEasy() {
@@ -84,7 +87,7 @@ public class NPC extends GameObject
             } else if (currentTime > relaxTime){
                 aimAtRotation(90);
             }
-            if (currentTime > nextShotDue) {
+            if (currentTime > nextShotDue && checkFrame == 1) {
                 if (findTarget(300)) shoot();
                 nextShotDue = currentTime + fireRate;
             }
@@ -124,7 +127,7 @@ public class NPC extends GameObject
                 direction = Greenfoot.getRandomNumber(4) + 1;
             }
             //aimAtPlayer();
-            if (currentTime > nextShotDue) {
+            if (currentTime > nextShotDue && checkFrame == 1) {
                 if (findTarget(300)) {                    
                     shoot();
                 }
@@ -172,6 +175,7 @@ public class NPC extends GameObject
 
     public void fadeAway() {
         if (getImage().getTransparency() <= 30) {
+            GameSettings.setCurrentScore(GameSettings.getCurrentScore() + 200*difficulty);
             getWorld().removeObject(this);
         } else {
             getImage().setTransparency(getImage().getTransparency() - 30);

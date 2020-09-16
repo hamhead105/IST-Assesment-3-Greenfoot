@@ -18,13 +18,25 @@ public class GameEndScreen extends World
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(1200, 700, 1);
         if (winState) { 
-            getBackground().drawImage(new GreenfootImage("You Win", 64, null, null), 480, 40);
+            GreenfootImage titleImage = new GreenfootImage("You Win", 64, null, null);
+            getBackground().drawImage(titleImage, (getWidth() / 2) - (titleImage.getWidth() / 2), 40);
         } else {
-            getBackground().drawImage(new GreenfootImage("You Lost", 64, null, null), 480, 40);
+            GreenfootImage titleImage = new GreenfootImage("You Lost", 64, null, null);
+            getBackground().drawImage(titleImage, (getWidth() / 2) - (titleImage.getWidth() / 2), 40);
         }
-        getBackground().drawImage(new GreenfootImage("Score: " + GameSettings.getCurrentScore(), 32, null, null), 535, 120);
+        if (GameSettings.checkScore()) {
+            GreenfootImage scoreImage = new GreenfootImage("NEW HIGH SCORE: " + GameSettings.getCurrentScore(), 32, null, null);
+            getBackground().drawImage(scoreImage, (getWidth() / 2) - (scoreImage.getWidth() / 2), 160);
+        } else {
+            GreenfootImage scoreImage = new GreenfootImage("Score: " + GameSettings.getCurrentScore(), 32, null, null);
+            getBackground().drawImage(scoreImage, (getWidth() / 2) - (scoreImage.getWidth() / 2), 120);
+            GreenfootImage textImage = new GreenfootImage("High Score: " + GameSettings.getHighScore(), 32, null, null);
+            getBackground().drawImage(textImage, (getWidth() / 2) - (textImage.getWidth() / 2), 160);
+        }
         ReturnButton returnButton = new ReturnButton();
         addObject(returnButton, 600, 350);
+        if (GameSettings.getCurrentScore() > GameSettings.getHighScore()) {
 
+        }
     }
 }

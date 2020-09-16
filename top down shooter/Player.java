@@ -94,6 +94,7 @@ public class Player extends GameObject
 
     public void act() 
     {        
+        getWorld().setPaintOrder(Player.class);
         if (health >= 0) {          
             //System.out.println(spreadCurrent);
             MouseInfo mouseInfo = Greenfoot.getMouseInfo();
@@ -194,7 +195,7 @@ public class Player extends GameObject
         currentAmmo--;
         updateAmmoCount();
         int barrelXOffset = 16;
-        int barrelYOffset = 75;
+        int barrelYOffset = 55;
         double alpha = 0;
         double theta = Math.toDegrees(Math.atan(barrelYOffset / barrelXOffset));
         double h = Math.sqrt(Math.pow(barrelXOffset, 2) + Math.pow(barrelYOffset, 2));
@@ -204,6 +205,8 @@ public class Player extends GameObject
 
         Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + (int) ((spreadCurrent / 2) - Greenfoot.getRandomNumber((int) Math.round(spreadCurrent))), 50, 40, damage);
         getWorld().addObject(bullet, 0, 0);
+        Muzzleflash muzzleFlash = new Muzzleflash(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + (int) (5 - Greenfoot.getRandomNumber(5)));
+        getWorld().addObject(muzzleFlash, -50, -50);
         spreadCurrent += spreadShotGain;
         if (gunType == 1) {
             List<NPC> npcs = getWorld().getObjects(NPC.class);

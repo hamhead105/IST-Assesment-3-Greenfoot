@@ -63,6 +63,7 @@ public class NPC extends GameObject
 
     public void act() 
     {
+        getWorld().setPaintOrder(NPC.class);
         currentTime = System.currentTimeMillis();        
         updateLocation();
         switch(difficulty) {
@@ -235,7 +236,7 @@ public class NPC extends GameObject
     public void shoot() {
         Greenfoot.playSound("HK416.mp3");
         int barrelXOffset = 16;
-        int barrelYOffset = 75;
+        int barrelYOffset = 55;
         double alpha = 0;
         double theta = Math.toDegrees(Math.atan(barrelYOffset / barrelXOffset));
         double h = Math.sqrt(Math.pow(barrelXOffset, 2) + Math.pow(barrelYOffset, 2));
@@ -245,6 +246,8 @@ public class NPC extends GameObject
 
         Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + shootSpread / 2 - Greenfoot.getRandomNumber(shootSpread) , 50, 40, damage);
         getWorld().addObject(bullet, 0, 0);
+        Muzzleflash muzzleFlash = new Muzzleflash(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + (int) (5 - Greenfoot.getRandomNumber(5)));
+        getWorld().addObject(muzzleFlash, -50, -50);
     }
 
     public boolean findTarget(int range) {

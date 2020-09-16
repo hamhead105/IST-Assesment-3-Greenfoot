@@ -22,7 +22,7 @@ public class Bullet extends GameObject
         this.speed = speed;
         this.damage = damage;      
     }
-    
+
     public void act() 
     {
         collisionCheck();
@@ -31,13 +31,13 @@ public class Bullet extends GameObject
         moveX((int) Math.round(Math.cos(Math.toRadians(getRotation())) * speed));
         moveY((int) Math.round(Math.sin(Math.toRadians(getRotation())) * speed));
     }
-    
+
     public void timedDestroy() {
         if (System.currentTimeMillis() > cullTime) {
             //getWorld().removeObject(this);
         }
     }
-    
+
     private void collisionCheck() {
         boolean willRemove = false;
         List<NPC> npcs = getWorld().getObjects(NPC.class);
@@ -45,15 +45,19 @@ public class Bullet extends GameObject
             if (Math.sqrt(Math.pow(npc.getFieldX() - this.getFieldX(), 2) + Math.pow(npc.getFieldY() - this.getFieldY(), 2)) <= npc.getColliderRadius()) {
                 npc.hit(damage);
                 willRemove = true;
+                BloodSplatter bloodSplatter = new BloodSplatter(getFieldX(), getFieldY(), getRotation());
+                getWorld().addObject(bloodSplatter,0,0);
             }      
         }
-        
+
         List<Player> players = getWorld().getObjects(Player.class);
         if (players != null) {
             for (Player player : players) {
                 if (Math.sqrt(Math.pow(player.getFieldX() - this.getFieldX(), 2) + Math.pow(player.getFieldY() - this.getFieldY(), 2)) <= player.getColliderRadius()) {
                     player.hit(damage);
                     willRemove = true;
+                    BloodSplatter bloodSplatter = new BloodSplatter(getFieldX(), getFieldY(), getRotation());
+                    getWorld().addObject(bloodSplatter,0,0);
                 }      
             }
         }
@@ -66,7 +70,7 @@ public class Bullet extends GameObject
             }       
         }
         if (willRemove) {
-             getWorld().removeObject(this);
+            getWorld().removeObject(this);
         }
     }
 }

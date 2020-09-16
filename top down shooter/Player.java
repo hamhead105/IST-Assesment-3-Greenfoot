@@ -71,12 +71,12 @@ public class Player extends GameObject
             image2.scale(240,200);
             setImage(image2);
             speed = 2;
-            cameraBias = 0.5;
+            cameraBias = 0.7;
             health = 60;
             fireRate = 220;
             spreadMin = 1;
-            spreadMax = 120;
-            spreadShotGain = 70; 
+            spreadMax = 45;
+            spreadShotGain = 20; 
             spreadRecover = 15;
             spreadCurrent = spreadMin;
 
@@ -204,7 +204,7 @@ public class Player extends GameObject
         int worldYOffset = (int) Math.round(Math.sin(Math.toRadians(alpha)) * h);
 
         Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + (int) ((spreadCurrent / 2) - Greenfoot.getRandomNumber((int) Math.round(spreadCurrent))), 50, 40, damage);
-        getWorld().addObject(bullet, 0, 0);
+        getWorld().addObject(bullet, -50, -50);
         Muzzleflash muzzleFlash = new Muzzleflash(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + (int) (5 - Greenfoot.getRandomNumber(5)));
         getWorld().addObject(muzzleFlash, -50, -50);
         spreadCurrent += spreadShotGain;
@@ -319,7 +319,7 @@ public class Player extends GameObject
     }
 
     public void winLevel() {
-        Greenfoot.delay(120);
+        Greenfoot.delay(30);
         GameEndScreen gameEnd = new GameEndScreen(true, score);
         Greenfoot.setWorld(gameEnd); 
     }

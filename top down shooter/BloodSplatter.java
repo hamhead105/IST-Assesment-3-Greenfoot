@@ -10,7 +10,7 @@ public class BloodSplatter extends GameObject
 {
     public BloodSplatter(int x, int y, int rot) {
         super(x,y);
-        getImage().scale(180,140);
+        getImage().scale(140,120);
         setRotation(rot);
         
     }

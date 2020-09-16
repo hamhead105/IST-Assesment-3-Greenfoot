@@ -245,7 +245,7 @@ public class NPC extends GameObject
         int worldYOffset = (int) Math.round(Math.sin(Math.toRadians(alpha)) * h);
 
         Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + shootSpread / 2 - Greenfoot.getRandomNumber(shootSpread) , 50, 40, damage);
-        getWorld().addObject(bullet, 0, 0);
+        getWorld().addObject(bullet, -50, -50);
         Muzzleflash muzzleFlash = new Muzzleflash(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + (int) (5 - Greenfoot.getRandomNumber(5)));
         getWorld().addObject(muzzleFlash, -50, -50);
     }

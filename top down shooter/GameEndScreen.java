@@ -15,22 +15,23 @@ public class GameEndScreen extends World
      */
     public GameEndScreen(boolean winState, int score)
     {    
-        // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(1200, 700, 1);
+        getBackground().setColor(new Color(5,5,50));
+        getBackground().fillRect(0, 0, 1200, 700);
         if (winState) { 
-            GreenfootImage titleImage = new GreenfootImage("You Win", 64, null, null);
+            GreenfootImage titleImage = new GreenfootImage("You Win", 64, Color.WHITE, null);
             getBackground().drawImage(titleImage, (getWidth() / 2) - (titleImage.getWidth() / 2), 40);
         } else {
-            GreenfootImage titleImage = new GreenfootImage("You Lost", 64, null, null);
+            GreenfootImage titleImage = new GreenfootImage("You Lost", 64, Color.WHITE, null);
             getBackground().drawImage(titleImage, (getWidth() / 2) - (titleImage.getWidth() / 2), 40);
         }
         if (GameSettings.checkScore()) {
-            GreenfootImage scoreImage = new GreenfootImage("NEW HIGH SCORE: " + GameSettings.getCurrentScore(), 32, null, null);
+            GreenfootImage scoreImage = new GreenfootImage("NEW HIGH SCORE: " + GameSettings.getCurrentScore(), 32, Color.WHITE, null);
             getBackground().drawImage(scoreImage, (getWidth() / 2) - (scoreImage.getWidth() / 2), 160);
         } else {
-            GreenfootImage scoreImage = new GreenfootImage("Score: " + GameSettings.getCurrentScore(), 32, null, null);
+            GreenfootImage scoreImage = new GreenfootImage("Score: " + GameSettings.getCurrentScore(), 32, Color.WHITE, null);
             getBackground().drawImage(scoreImage, (getWidth() / 2) - (scoreImage.getWidth() / 2), 120);
-            GreenfootImage textImage = new GreenfootImage("High Score: " + GameSettings.getHighScore(), 32, null, null);
+            GreenfootImage textImage = new GreenfootImage("High Score: " + GameSettings.getHighScore(), 32, Color.WHITE, null);
             getBackground().drawImage(textImage, (getWidth() / 2) - (textImage.getWidth() / 2), 160);
         }
         ReturnButton returnButton = new ReturnButton();

@@ -10,8 +10,10 @@ public class Flag extends GameObject
 {
     public Flag(int x, int y) {
         super(x,y);
-        GreenfootImage image = getImage();
-        image.scale(100,100);
+        GreenfootImage image = new GreenfootImage(50, 50);
+        image.setColor(new Color(120,255,120));
+        image.fillRect(0, 0, 50, 50);
+        setImage(image);
     }
     public void act() 
     {

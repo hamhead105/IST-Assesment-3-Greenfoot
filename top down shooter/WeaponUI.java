@@ -20,20 +20,20 @@ public class WeaponUI extends Actor
         this.currentAmmo = currentAmmo;
         this.maxAmmo = maxAmmo;
         GreenfootImage image = new GreenfootImage(1200, 1200);
-        image.setColor(Color.BLACK);
-        image.drawRect(949, 729, 231, 151);
         image.setColor(Color.WHITE);
+        image.drawRect(949, 729, 231, 151);
+        image.setColor(new Color(5,5,50));
         image.fillRect(950, 730, 230, 150);
        
-        image.drawImage(new GreenfootImage(currentAmmo + "/" + maxAmmo, 40, null, null), 970, 830);
+        image.drawImage(new GreenfootImage(currentAmmo + "/" + maxAmmo, 40, Color.WHITE, null), 970, 830);
         GreenfootImage gunIcon = null;
         if (gunType == 1) {
-            gunIcon = new GreenfootImage("M4 icon.jpg");
+            gunIcon = new GreenfootImage("M4 icon.png");
             gunIcon.scale(150,60);
             //gunIcon.setImage();
         }
         if (gunType == 2) {
-            gunIcon = new GreenfootImage("M4 icon.jpg");
+            gunIcon = new GreenfootImage("M4 icon.png");
             gunIcon.scale(150,60);
             //gunIcon.setImage();
         }

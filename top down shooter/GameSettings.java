@@ -26,7 +26,7 @@ public class GameSettings extends Actor
 
     public void act() 
     {
-        System.out.println(difficulty);
+        //System.out.println(difficulty);
     }    
 
     public static void setDifficulty(int newDifficulty) {
@@ -71,12 +71,12 @@ public class GameSettings extends Actor
         UserInfo info = UserInfo.getMyInfo();
         if (UserInfo.isStorageAvailable()) {
             if (currentScore > info.getScore()) {
-                System.out.println("new score: " + info.getScore() + " to " + currentScore);
+                //System.out.println("new score: " + info.getScore() + " to " + currentScore);
                 info.setScore(currentScore);
                 return true;
             }
             else {
-                System.out.println("old score");
+                //System.out.println("old score");
                 return false;
             }
 

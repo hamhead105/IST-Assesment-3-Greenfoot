@@ -33,12 +33,12 @@ public class ClassButton extends Button
             break;
         }
         GreenfootImage image = new GreenfootImage(1200, 1200);
-        image.setColor(Color.BLACK);
-        image.drawRect(399, 599, 401, 101);
         image.setColor(Color.WHITE);
+        image.drawRect(399, 599, 401, 101);
+        image.setColor(new Color(5,5,50));
         image.fillRect(400, 600, 400, 100);
        
-        image.drawImage(new GreenfootImage("Class: " + className, 40, null, null), 440, 630);
+        image.drawImage(new GreenfootImage("Class: " + className, 40, Color.WHITE, null), 440, 630);
         setImage(image);
     }
     

@@ -18,7 +18,7 @@ public class Bullet extends GameObject
         cullTime = System.currentTimeMillis()+400;
         setRotation(direction);
         GreenfootImage image = getImage();
-        image.scale(size,size / 10);
+        image.scale(size,size / 2);
         this.speed = speed;
         this.damage = damage;      
     }

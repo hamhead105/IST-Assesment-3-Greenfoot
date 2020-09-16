@@ -34,28 +34,36 @@ public class NPC extends GameObject
 
     public NPC(int x, int y) {
         super(x,y);
-        shootSpread = 15;
         health = 100;
         GreenfootImage image = getImage();
         image.scale(240,200);
         speed = 1;
-        fireRate = 150;
-        difficulty = 2;
+        
         direction = 4;
         FOV = 120;
         turnSpeed = 5;
         difficulty = GameSettings.getDifficulty();
         switch (difficulty) {
             case 1:
+            difficulty = 1;
             reactionTime = 1000;
             damage = 10;
+            fireRate = 150;
+            shootSpread = 35;
             break;
             case 2:
+            difficulty = 2;
             reactionTime = 500;
             damage = 25;
+            fireRate = 150;
+            shootSpread = 27;
+            break;
             case 3:
-            reactionTime = 1000;
-            damage = 40;
+            difficulty = 3;
+            reactionTime = 100;
+            damage = 35;
+            fireRate = 20;
+            shootSpread = 15;
             break;
 
         }
@@ -83,14 +91,25 @@ public class NPC extends GameObject
 
     public void runDifficultyEasy() {
         if (health >= 0) {
-            if (hasSeenPlayer) {
+            if (hasSeenPlayer || alerted) {
                 aimAtPlayer();
-            } else if (currentTime > relaxTime){
-                aimAtRotation(90);
+                if (currentTime > relaxTime) {
+                    alerted = false;
+                }
+            } else if (currentTime > relaxTime) {
+                aimAtRotation(direction*90);
             }
+            if (Greenfoot.getRandomNumber(50) == 1) {
+                direction = Greenfoot.getRandomNumber(4) + 1;
+            }
+            //System.out.println(direction);
+            //aimAtPlayer();
             if (currentTime > nextShotDue && checkFrame == 1) {
-                if (findTarget(300)) shoot();
+                if (findTarget(300)) {                    
+                    shoot();
+                }
                 nextShotDue = currentTime + fireRate;
+
             }
         } else {
             fadeAway();
@@ -142,7 +161,14 @@ public class NPC extends GameObject
 
     public void runDifficultyHard() {
         if (health >= 0) {
-            aimAtRotation(direction*90);
+            if (hasSeenPlayer || alerted) {
+                aimAtPlayer();
+                if (currentTime > relaxTime) {
+                    alerted = false;
+                }
+            } else if (currentTime > relaxTime) {
+                aimAtRotation(direction*90);
+            }
             if (Greenfoot.getRandomNumber(50) == 1) {
                 direction = Greenfoot.getRandomNumber(4) + 1;
             }
@@ -162,6 +188,14 @@ public class NPC extends GameObject
                 }
             } else {
                 direction = Greenfoot.getRandomNumber(4) + 1;
+            }
+            //aimAtPlayer();
+            if (currentTime > nextShotDue && checkFrame == 1) {
+                if (findTarget(300)) {                    
+                    shoot();
+                }
+                nextShotDue = currentTime + fireRate;
+
             }
         } else {
             fadeAway();
@@ -244,7 +278,7 @@ public class NPC extends GameObject
         int worldXOffset = (int) Math.round(Math.cos(Math.toRadians(alpha)) * h);
         int worldYOffset = (int) Math.round(Math.sin(Math.toRadians(alpha)) * h);
 
-        Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + shootSpread / 2 - Greenfoot.getRandomNumber(shootSpread) , 50, 40, damage);
+        Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + ((shootSpread / 2) - Greenfoot.getRandomNumber(shootSpread)), 50, 40, damage);
         getWorld().addObject(bullet, -50, -50);
         Muzzleflash muzzleFlash = new Muzzleflash(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + (int) (5 - Greenfoot.getRandomNumber(5)));
         getWorld().addObject(muzzleFlash, -50, -50);

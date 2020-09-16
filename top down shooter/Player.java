@@ -95,7 +95,7 @@ public class Player extends GameObject
     public void act() 
     {        
         getWorld().setPaintOrder(Player.class);
-        if (health >= 0) {          
+        if (health > 0) {          
             //System.out.println(spreadCurrent);
             MouseInfo mouseInfo = Greenfoot.getMouseInfo();
 
@@ -194,7 +194,7 @@ public class Player extends GameObject
         }
         currentAmmo--;
         updateAmmoCount();
-        int barrelXOffset = 16;
+        int barrelXOffset = 13;
         int barrelYOffset = 55;
         double alpha = 0;
         double theta = Math.toDegrees(Math.atan(barrelYOffset / barrelXOffset));

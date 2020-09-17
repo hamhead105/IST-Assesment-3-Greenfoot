@@ -33,15 +33,17 @@ public class Player extends GameObject
 
     private int FOV;
     private int damage;
-    private static int score;
     private int checkFrame;
+    
+    private long nextScoreLost;
 
     public Player(int x, int y) {
         super(x,y);
         GameSettings.setCurrentScore(0);
         nextShotAvailable = (int) System.currentTimeMillis();
         reloadFinishTime = System.currentTimeMillis(); 
-
+        GameSettings.setCurrentScore(150);
+        
         switch (GameSettings.getPlayerClass()) {
             case 1:
             GreenfootImage image = new GreenfootImage("combatant1.png");
@@ -56,7 +58,7 @@ public class Player extends GameObject
             spreadShotGain = 30; 
             spreadRecover = 5;
             spreadCurrent = spreadMin;
-
+            
             isReloading = false;        
             maxAmmo = 30;
             currentAmmo = maxAmmo;
@@ -94,6 +96,10 @@ public class Player extends GameObject
 
     public void act() 
     {        
+        if (System.currentTimeMillis() > nextScoreLost) {
+            nextScoreLost = System.currentTimeMillis() + 1000;
+            if (GameSettings.getCurrentScore() > 0) GameSettings.addCurrentScore(-2);
+        }
         getWorld().setPaintOrder(Player.class);
         if (health > 0) {          
             //System.out.println(spreadCurrent);
@@ -244,7 +250,7 @@ public class Player extends GameObject
         if (getImage().getTransparency() <= 30) {
             //getWorld().removeObject(this);
             Greenfoot.delay(25);
-            GameEndScreen gameEnd = new GameEndScreen(false, score);
+            GameEndScreen gameEnd = new GameEndScreen(false, GameSettings.getCurrentScore());
             Greenfoot.setWorld(gameEnd);      
         }
     }
@@ -319,8 +325,20 @@ public class Player extends GameObject
     }
 
     public void winLevel() {
+        switch(GameSettings.getDifficulty()) {
+            case 1:
+            GameSettings.addCurrentScore(500);
+            break;
+            case 2:
+            GameSettings.addCurrentScore(1000);
+            break;
+            case 3:
+            GameSettings.addCurrentScore(2000);
+            break;
+            
+        }
         Greenfoot.delay(30);
-        GameEndScreen gameEnd = new GameEndScreen(true, score);
+        GameEndScreen gameEnd = new GameEndScreen(true, GameSettings.getCurrentScore());
         Greenfoot.setWorld(gameEnd); 
     }
 
@@ -413,11 +431,4 @@ public class Player extends GameObject
         }
     }
 
-    public static int getScore() {
-        return score;
-    }
-
-    public static void addScore(int points) {
-        score += points;
-    }
 }

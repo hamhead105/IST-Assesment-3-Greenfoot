@@ -62,6 +62,10 @@ public class GameSettings extends Actor
     public static void setCurrentScore(int newCurrentScore) {
         currentScore = newCurrentScore;
     }
+    
+    public static void addCurrentScore(int value) {
+        currentScore += value;
+    }
 
     public static int getCurrentScore() {
         return currentScore;

@@ -98,7 +98,7 @@ public class Player extends GameObject
     {        
         if (System.currentTimeMillis() > nextScoreLost) {
             nextScoreLost = System.currentTimeMillis() + 1000;
-            if (GameSettings.getCurrentScore() > 0) GameSettings.addCurrentScore(-2);
+            if (GameSettings.getCurrentScore() > 0) GameSettings.addCurrentScore(-5);
         }
         getWorld().setPaintOrder(Player.class);
         if (health > 0) {          
@@ -210,9 +210,9 @@ public class Player extends GameObject
         int worldYOffset = (int) Math.round(Math.sin(Math.toRadians(alpha)) * h);
 
         Bullet bullet = new Bullet(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + (int) ((spreadCurrent / 2) - Greenfoot.getRandomNumber((int) Math.round(spreadCurrent))), 50, 40, damage);
-        getWorld().addObject(bullet, -50, -50);
+        getWorld().addObject(bullet, -100, -100);
         Muzzleflash muzzleFlash = new Muzzleflash(getFieldX() + worldXOffset, getFieldY() + worldYOffset, getRotation() - 90 + (int) (5 - Greenfoot.getRandomNumber(5)));
-        getWorld().addObject(muzzleFlash, -50, -50);
+        getWorld().addObject(muzzleFlash, -100, -100);
         spreadCurrent += spreadShotGain;
         if (gunType == 1) {
             List<NPC> npcs = getWorld().getObjects(NPC.class);

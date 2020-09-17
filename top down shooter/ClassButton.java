@@ -8,11 +8,10 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class ClassButton extends Button
 {
-    private int playerClass;
+    private static int playerClass = 1;
     
     public ClassButton() {
         super(400, 100, 0, -50);
-        playerClass = 1;
     }
     
     public void act() {

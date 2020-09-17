@@ -8,11 +8,10 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class DifficultyButton extends Button
 {
-    private int difficulty;
+    private static int difficulty = 1;
 
     public DifficultyButton() {
         super(400, 100, 0, -50);
-        difficulty = 2;
     }
 
     public void act() {

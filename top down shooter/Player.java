@@ -34,7 +34,7 @@ public class Player extends GameObject
     private int FOV;
     private int damage;
     private int checkFrame;
-    
+
     private long nextScoreLost;
 
     public Player(int x, int y) {
@@ -43,7 +43,7 @@ public class Player extends GameObject
         nextShotAvailable = (int) System.currentTimeMillis();
         reloadFinishTime = System.currentTimeMillis(); 
         GameSettings.setCurrentScore(150);
-        
+
         switch (GameSettings.getPlayerClass()) {
             case 1:
             GreenfootImage image = new GreenfootImage("combatant1.png");
@@ -58,7 +58,7 @@ public class Player extends GameObject
             spreadShotGain = 30; 
             spreadRecover = 5;
             spreadCurrent = spreadMin;
-            
+
             isReloading = false;        
             maxAmmo = 30;
             currentAmmo = maxAmmo;
@@ -160,7 +160,7 @@ public class Player extends GameObject
         updateAmmoCount();
         updateHealthBar();
         if (checkFrame == 1) {
-            updateEnemyVisibility(100);
+            updateEnemyVisibility(1200);
             List<Flag> flags = getWorld().getObjects(Flag.class);
             for (Flag flag : flags) {
                 if (Math.sqrt(Math.pow(flag.getFieldX() - this.getFieldX(), 2) + Math.pow(flag.getFieldY() - this.getFieldY(), 2)) <= 100) {
@@ -335,7 +335,7 @@ public class Player extends GameObject
             case 3:
             GameSettings.addCurrentScore(2000);
             break;
-            
+
         }
         Greenfoot.delay(30);
         GameEndScreen gameEnd = new GameEndScreen(true, GameSettings.getCurrentScore());
@@ -351,82 +351,83 @@ public class Player extends GameObject
             int yDifference = npc.getFieldY() - this.getFieldY();
             int xDifference = npc.getFieldX() - this.getFieldX();
             int distanceToNPC = (int) Math.round(Math.sqrt(Math.pow(yDifference,2) + Math.pow(xDifference,2)));
-            int checkDist = 0;
-            int[] playerPosition;
-            int rotationToNPC = (int) Math.round (Math.toDegrees(Math.atan2(npc.getFieldY() - this.getFieldY(), npc.getFieldX() - this.getFieldX())));           
-            List<BoxWall> walls = getWorld().getObjects(BoxWall.class);
-            if (walls != null) {                  
-                for (BoxWall boxWall : walls) {
-                    int[][] cornerPositions = new int[4][2];
-                    cornerPositions[0][0] = boxWall.getFieldX() - boxWall.getColliderBounds(); //top left
-                    cornerPositions[0][1] = boxWall.getFieldY() + boxWall.getColliderBounds();
-                    cornerPositions[1][0] = boxWall.getFieldX() + boxWall.getColliderBounds(); //top right
-                    cornerPositions[1][1] = boxWall.getFieldY() + boxWall.getColliderBounds();
-                    cornerPositions[2][0] = boxWall.getFieldX() + boxWall.getColliderBounds(); // bottom right
-                    cornerPositions[2][1] = boxWall.getFieldY() - boxWall.getColliderBounds();
-                    cornerPositions[3][0] = boxWall.getFieldX() - boxWall.getColliderBounds(); // bottom left
-                    cornerPositions[3][1] = boxWall.getFieldY() - boxWall.getColliderBounds();
+            if (distanceToNPC < range) {
+                int rotationToNPC = (int) Math.round (Math.toDegrees(Math.atan2(npc.getFieldY() - this.getFieldY(), npc.getFieldX() - this.getFieldX())));           
+                List<BoxWall> walls = getWorld().getObjects(BoxWall.class);
+                if (walls != null) {                  
+                    for (BoxWall boxWall : walls) {
+                        int[][] cornerPositions = new int[4][2];
+                        cornerPositions[0][0] = boxWall.getFieldX() - boxWall.getColliderBounds(); //top left
+                        cornerPositions[0][1] = boxWall.getFieldY() + boxWall.getColliderBounds();
+                        cornerPositions[1][0] = boxWall.getFieldX() + boxWall.getColliderBounds(); //top right
+                        cornerPositions[1][1] = boxWall.getFieldY() + boxWall.getColliderBounds();
+                        cornerPositions[2][0] = boxWall.getFieldX() + boxWall.getColliderBounds(); // bottom right
+                        cornerPositions[2][1] = boxWall.getFieldY() - boxWall.getColliderBounds();
+                        cornerPositions[3][0] = boxWall.getFieldX() - boxWall.getColliderBounds(); // bottom left
+                        cornerPositions[3][1] = boxWall.getFieldY() - boxWall.getColliderBounds();
 
-                    int[] rotationCorners = new int[4];
-                    rotationCorners[0] = (int) Math.round (Math.toDegrees(Math.atan2(cornerPositions[0][1] - this.getFieldY(), cornerPositions[0][0] - this.getFieldX())));
-                    rotationCorners[1] = (int) Math.round (Math.toDegrees(Math.atan2(cornerPositions[1][1] - this.getFieldY(), cornerPositions[1][0] - this.getFieldX())));
-                    rotationCorners[2] = (int) Math.round (Math.toDegrees(Math.atan2(cornerPositions[2][1] - this.getFieldY(), cornerPositions[2][0] - this.getFieldX())));
-                    rotationCorners[3] = (int) Math.round (Math.toDegrees(Math.atan2(cornerPositions[3][1] - this.getFieldY(), cornerPositions[3][0] - this.getFieldX())));
-                    //System.out.println("corner 1: " + rotationCorners[0] + " corner 2: " + rotationCorners[1] + " corner 3: " + rotationCorners[2] + " corner 4: " + rotationCorners[3]);
-                    int largest = rotationCorners[0];
-                    int smallest = rotationCorners[0];
-                    int i;
-                    for (i=1;i<rotationCorners.length; i++) {
-                        if (rotationCorners[i] > largest) largest = rotationCorners[i];
-                    }
-                    for (i=1;i<rotationCorners.length; i++) {
-                        if (rotationCorners[i] < smallest) smallest = rotationCorners[i];
-                    }
-                    double distanceToWall = Math.sqrt((Math.pow(boxWall.getFieldX() - this.getFieldX(), 2) + (Math.pow(boxWall.getFieldY() - this.getFieldY(), 2))));
-                    //System.out.println("smallest: " + smallest + " | largest: " + largest + " | player: " + rotationToPlayer);
-                    //TODO find shortest rotation instead of subtracting
-                    if (distanceToWall < distanceToNPC) {
-                        if (smallest < 0 && largest > 0) {
-                            //System.out.println("smallest: " + smallest + " largest: " + largest + " " + "caseB");
-                            //System.out.println("cross 0");
-                            if (smallest < -90) {
-                                if (rotationToNPC < smallest && rotationToNPC >= -180 || rotationToNPC > largest && rotationToNPC <= 180) {
-                                    //System.out.println("caseA");
-                                    isVisible = false;
-                                }
-                            } else if (smallest > -90) {
-                                if (rotationToNPC > smallest && rotationToNPC <= 0 || rotationToNPC < largest && rotationToNPC >= 0) {
-                                    //System.out.println("caseB");
-                                    isVisible = false;
+                        int[] rotationCorners = new int[4];
+                        rotationCorners[0] = (int) Math.round (Math.toDegrees(Math.atan2(cornerPositions[0][1] - this.getFieldY(), cornerPositions[0][0] - this.getFieldX())));
+                        rotationCorners[1] = (int) Math.round (Math.toDegrees(Math.atan2(cornerPositions[1][1] - this.getFieldY(), cornerPositions[1][0] - this.getFieldX())));
+                        rotationCorners[2] = (int) Math.round (Math.toDegrees(Math.atan2(cornerPositions[2][1] - this.getFieldY(), cornerPositions[2][0] - this.getFieldX())));
+                        rotationCorners[3] = (int) Math.round (Math.toDegrees(Math.atan2(cornerPositions[3][1] - this.getFieldY(), cornerPositions[3][0] - this.getFieldX())));
+                        //System.out.println("corner 1: " + rotationCorners[0] + " corner 2: " + rotationCorners[1] + " corner 3: " + rotationCorners[2] + " corner 4: " + rotationCorners[3]);
+                        int largest = rotationCorners[0];
+                        int smallest = rotationCorners[0];
+                        int i;
+                        for (i=1;i<rotationCorners.length; i++) {
+                            if (rotationCorners[i] > largest) largest = rotationCorners[i];
+                        }
+                        for (i=1;i<rotationCorners.length; i++) {
+                            if (rotationCorners[i] < smallest) smallest = rotationCorners[i];
+                        }
+                        double distanceToWall = Math.sqrt((Math.pow(boxWall.getFieldX() - this.getFieldX(), 2) + (Math.pow(boxWall.getFieldY() - this.getFieldY(), 2))));
+                        //System.out.println("smallest: " + smallest + " | largest: " + largest + " | player: " + rotationToPlayer);
+                        //TODO find shortest rotation instead of subtracting
+                        if (distanceToWall < distanceToNPC) {
+                            if (smallest < 0 && largest > 0) {
+                                //System.out.println("smallest: " + smallest + " largest: " + largest + " " + "caseB");
+                                //System.out.println("cross 0");
+                                if (smallest < -90) {
+                                    if (rotationToNPC < smallest && rotationToNPC >= -180 || rotationToNPC > largest && rotationToNPC <= 180) {
+                                        //System.out.println("caseA");
+                                        isVisible = false;
+                                    }
+                                } else if (smallest > -90) {
+                                    if (rotationToNPC > smallest && rotationToNPC <= 0 || rotationToNPC < largest && rotationToNPC >= 0) {
+                                        //System.out.println("caseB");
+                                        isVisible = false;
+                                    }
                                 }
                             }
+                            else if (rotationToNPC > smallest && rotationToNPC < largest && distanceToWall < distanceToNPC) {
+                                //System.out.println("caseC");
+                                isVisible = false; 
+                            }
                         }
-                        else if (rotationToNPC > smallest && rotationToNPC < largest && distanceToWall < distanceToNPC) {
-                            //System.out.println("caseC");
-                            isVisible = false; 
-                        }
-                    }
-                }               
-            }
+                    }               
+                }
 
-            //System.out.println("myRotation " + getRotation() + " NPCrotation " + (rotationToNPC));
-            if (rotationToNPC > 180 && getRotation() - 90 < 0) {
-                if ((getRotation() - 90) + (360 - rotationToNPC) > (FOV/2)) {
-                    //System.out.println("case1");
+                //System.out.println("myRotation " + getRotation() + " NPCrotation " + (rotationToNPC));
+                if (rotationToNPC > 180 && getRotation() - 90 < 0) {
+                    if ((getRotation() - 90) + (360 - rotationToNPC) > (FOV/2)) {
+                        //System.out.println("case1");
+                        isVisible = false;
+                    }
+                }
+                else if (rotationToNPC < 0 && getRotation() - 90 > 180) {
+                    if ((rotationToNPC - 90) + (360 - getRotation()) > (FOV/2)) {
+                        //System.out.println("case2");
+                        isVisible = false;
+                    }
+                }
+                else if (getRotation() - 90 > rotationToNPC + (FOV/2) || getRotation() - 90 < rotationToNPC - (FOV/2)) {
+                    //System.out.println("case3");
                     isVisible = false;
                 }
-            }
-            else if (rotationToNPC < 0 && getRotation() - 90 > 180) {
-                if ((rotationToNPC - 90) + (360 - getRotation()) > (FOV/2)) {
-                    //System.out.println("case2");
-                    isVisible = false;
-                }
-            }
-            else if (getRotation() - 90 > rotationToNPC + (FOV/2) || getRotation() - 90 < rotationToNPC - (FOV/2)) {
-                //System.out.println("case3");
+            } else {
                 isVisible = false;
             }
-
             npc.setVisible(isVisible);
         }
     }

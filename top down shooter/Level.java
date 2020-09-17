@@ -10,7 +10,7 @@ public class Level extends World
 {
     private int levelXOffset = -1;
     private int levelYOffset = -1;
-    private int levelLength = 20;
+    private int levelLength;
     int[] levelStructure;
     
     ArrayList<BoxWall> boxWalls = new ArrayList<BoxWall>();
@@ -56,13 +56,13 @@ public class Level extends World
         if (objectType == 1) {
             boxWalls.add(new BoxWall(x,y));
         }
-        if (objectType == 2) {
+        else if (objectType == 2) {
             npcs.add(new NPC(x,y));
         }
-        if (objectType == 3) {
+        else if (objectType == 3) {
             navPoints.add(new NavPoint(x,y));
         }
-        if (objectType == 4) {
+        else if (objectType == 4) {
             flags.add(new Flag(x,y));
         }
     }

@@ -4,7 +4,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * Write a description of class BoxWall here.
  * 
  * @author Peter Jung
- * @version (a version number or a date)
+ * @version 1
  */
 public class BoxWall extends GameObject
 {

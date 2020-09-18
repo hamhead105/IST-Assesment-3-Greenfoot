@@ -3,8 +3,8 @@ import java.util.List;
 /**
  * Write a description of class NPC here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Peter Jung
+ * @version 1
  */
 public class NPC extends GameObject
 {

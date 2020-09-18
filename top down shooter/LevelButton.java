@@ -3,8 +3,8 @@ import java.awt.Image;
 /**
  * Write a description of class LevelButton here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Peter Jung
+ * @version 1
  */
 public class LevelButton extends Button
 {

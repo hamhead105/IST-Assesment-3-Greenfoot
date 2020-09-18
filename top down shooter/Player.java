@@ -78,7 +78,7 @@ public class Player extends GameObject
             fireRate = 220;
             spreadMin = 1;
             spreadMax = 45;
-            spreadShotGain = 20; 
+            spreadShotGain = 30; 
             spreadRecover = 15;
             spreadCurrent = spreadMin;
 

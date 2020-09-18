@@ -8,7 +8,6 @@ import java.awt.Image;
  */
 public class ReturnButton extends Button
 {
-    private int level;
     public ReturnButton() {
         super(400, 100, 0, -50);
     }

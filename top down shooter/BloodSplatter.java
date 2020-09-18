@@ -17,7 +17,7 @@ public class BloodSplatter extends GameObject
     public void act() 
     {
         updateLocation();
-         if (getImage().getTransparency() <= 5) {
+        if (getImage().getTransparency() <= 5) {
             getWorld().removeObject(this);
         } else {
             getImage().setTransparency(getImage().getTransparency() - 5);

@@ -27,21 +27,6 @@ public class Camera extends Actor
     {
         camX += (int) Math.round((targetCamX - camX) / cameraSpeed);
         camY += (int) Math.round((targetCamY - camY) / cameraSpeed);
-
-        /* basic camera moving
-        if (Greenfoot.isKeyDown("down")) {
-            camY -= 5;
-        }
-        if (Greenfoot.isKeyDown("up")) {
-            camY += 5;
-        }
-         if (Greenfoot.isKeyDown("right")) {
-            camX += 5;
-        }
-        if (Greenfoot.isKeyDown("left")) {
-            camX -= 5;
-        }
-        */
     } 
     
     public static void setTargetCamX(int x) {

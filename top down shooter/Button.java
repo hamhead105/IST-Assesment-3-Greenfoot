@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Button here.
+ * Base class for buttons, contains information for if mouse is hovering over the button
  * 
  * @author Peter Jung
  * @version 1
@@ -24,6 +24,7 @@ public class Button extends Actor
         // Add your action code here.
     }
     
+    // is the mouse hovering over the mouse
     public boolean wasClicked(int x, int y) {
         if (x + clickXOffset > getX() - (clickBoundaryX / 2) &&
             x + clickXOffset < getX() + (clickBoundaryX / 2) &&

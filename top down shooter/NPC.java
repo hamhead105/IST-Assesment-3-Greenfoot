@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.List;
 /**
- * Write a description of class NPC here.
+ * base class for enemies
  * 
  * @author Peter Jung
  * @version 1
@@ -86,7 +86,7 @@ public class NPC extends GameObject
             break;
         }
         checkFrame++;
-        if (checkFrame == 10) checkFrame = 1;
+        if (checkFrame >= 10) checkFrame = 1;
     }
 
     public void runDifficultyEasy() {
@@ -229,9 +229,6 @@ public class NPC extends GameObject
             int targetRotation = (int) Math.round (Math.toDegrees(Math.atan2(player.getFieldY() - this.getFieldY(), player.getFieldX() - this.getFieldX())) + 180);             
             int currentRotation = getRotation() + 90;
             if (currentRotation > 360) currentRotation = currentRotation - 360;
-            if (currentRotation > 360) {
-                currentRotation = currentRotation - 360;
-            }
             if (currentRotation >= 270 && targetRotation <= 90) {
                 rotationForce = (targetRotation + 360 - currentRotation) / turnSpeed;
             }
@@ -265,14 +262,13 @@ public class NPC extends GameObject
 
         //System.out.println (currentRotation + " " + targetRotation);
         setRotation(getRotation() + rotationForce);
-
     }
 
     public void shoot() {
         Greenfoot.playSound("HK416.mp3");
         int barrelXOffset = 16;
         int barrelYOffset = 55;
-        double alpha = 0;
+        double alpha;
         double theta = Math.toDegrees(Math.atan(barrelYOffset / barrelXOffset));
         double h = Math.sqrt(Math.pow(barrelXOffset, 2) + Math.pow(barrelYOffset, 2));
         alpha = getRotation() - theta;
@@ -336,7 +332,7 @@ public class NPC extends GameObject
                             if (smallest < 0 && largest > 0) {
                                 //System.out.println("smallest: " + smallest + " largest: " + largest + " " + "caseB");
                                 //System.out.println("cross 0");
-                                if (smallest < -90) {
+                                if (smallest <= -90) {
                                     if (rotationToPlayer < smallest && rotationToPlayer >= -180 || rotationToPlayer > largest && rotationToPlayer <= 180) {
                                         //System.out.println("caseA");
                                         hasSeenPlayer = false;

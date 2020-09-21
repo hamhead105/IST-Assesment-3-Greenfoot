@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class GameSettings here.
+ * Holds game settings and player preferences
  * 
  * @author Peter Jung
  * @version 1
@@ -55,7 +55,7 @@ public class GameSettings extends Actor
             return info.getScore();
         }
         else { 
-            return 15;
+            return 0;
         }
     }
 

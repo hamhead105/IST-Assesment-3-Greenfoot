@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class MainMenu here.
+ * constructor for the main menu
  * 
  * @author Peter Jung
  * @version 1

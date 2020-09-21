@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Level
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ Level1\ here.\r\n\ \r\n\ @author\ Peter\ Jung\ \r\n\ @version\ 1\r\n
+comment0.text=\r\n\ Creates\ level\ based\ on\ an\ array,\ iterates\ through\ each\ number\ in\ the\ array\ and\ places\ it\ into\ the\ world.\r\n\ \r\n\ @author\ Peter\ Jung\ \r\n\ @version\ 1\r\n
 comment1.params=
 comment1.target=Level()
 comment2.params=levelStructure\ levelLength

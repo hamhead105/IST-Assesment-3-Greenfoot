@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class HealthBar here.
+ * UI element for health bar
  * 
  * @author Peter Jung
  * @version 1

@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class GameEndScreen here.
+ * World for when game ends, this will show score, game status and a button to return to the main menu
  * 
  * @author Peter Jung
  * @version 1

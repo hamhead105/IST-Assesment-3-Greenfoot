@@ -1,8 +1,0 @@
-#BlueJ class context
-comment0.target=particleEffect
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ particleEffect\ here.\r\n\ \r\n\ @author\ Peter\ Jung\r\n\ @version\ 1\r\n
-comment1.params=x\ y\ rot
-comment1.target=particleEffect(int,\ int,\ int)
-comment2.params=
-comment2.target=void\ act()
-numComments=3

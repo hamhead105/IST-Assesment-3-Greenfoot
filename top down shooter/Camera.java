@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Camera here.
+ * static information about camera position.
  * 
  * @author Peter Jung
  * @version 1

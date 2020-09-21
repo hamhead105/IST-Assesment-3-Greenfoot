@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Muzzleflash here.
+ * particle effects
  * 
  * @author Peter Jung
  * @version 1

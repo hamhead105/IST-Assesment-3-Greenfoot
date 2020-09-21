@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Flag
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ Flag\ here.\r\n\ \r\n\ @author\ Peter\ Jung\r\n\ @version\ 1\r\n
+comment0.text=\r\n\ player\ wins\ on\ touching\ this\r\n\ \r\n\ @author\ Peter\ Jung\r\n\ @version\ 1\r\n
 comment1.params=x\ y
 comment1.target=Flag(int,\ int)
 comment2.params=

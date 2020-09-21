@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class GameObject here.
+ * Base class for any object that moves according to camera position
  * 
  * @author Peter Jung
  * @version 1

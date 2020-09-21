@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
 /**
- * Write a description of class Level1 here.
+ * Creates level based on an array, iterates through each number in the array and places it into the world.
  * 
  * @author Peter Jung 
  * @version 1

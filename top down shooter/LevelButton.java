@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.awt.Image;
 /**
- * Write a description of class LevelButton here.
+ * On click, creates the desired level
  * 
  * @author Peter Jung
  * @version 1

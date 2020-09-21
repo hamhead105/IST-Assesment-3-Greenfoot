@@ -2,7 +2,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.List;
 
 /**
- * Write a description of class Bullet here.
+ * in game projectile, deals damage on collision with an enemy
  * 
  * @author Peter Jung
  * @version 1

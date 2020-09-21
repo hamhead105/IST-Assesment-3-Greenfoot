@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.awt.Image;
 /**
- * Write a description of class ReturnButton here.
+ * On click, returns to main menu
  * 
  * @author Peter Jung
  * @version 1

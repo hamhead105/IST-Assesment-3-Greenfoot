@@ -1,8 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class test here.
- * 
+ * information for test level
  * @author Peter Jung
  * @version 1
  */

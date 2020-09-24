@@ -15,6 +15,7 @@ public class GameEndScreen extends World
      */
     public GameEndScreen(boolean winState, int score)
     {    
+        // create game end screen
         super(1200, 700, 1);
         getBackground().setColor(new Color(5,5,50));
         getBackground().fillRect(0, 0, 1200, 700);

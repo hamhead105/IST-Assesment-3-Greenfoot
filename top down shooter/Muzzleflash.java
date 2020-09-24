@@ -16,6 +16,7 @@ public class Muzzleflash extends GameObject
     }
     public void act() 
     {
+        // decrease sensitivity and then destroy
         updateLocation();
          if (getImage().getTransparency() <= 45) {
             getWorld().removeObject(this);

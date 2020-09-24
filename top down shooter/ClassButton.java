@@ -15,6 +15,7 @@ public class ClassButton extends Button
     }
     
     public void act() {
+        // draw button
         GameSettings.setPlayerClass(playerClass);
         Color currentColor = new Color(5,5,50);
         MouseInfo mouseInfo = Greenfoot.getMouseInfo();
@@ -28,6 +29,7 @@ public class ClassButton extends Button
             }  
         }
         String className = "";
+        // toggle between player classes
         switch(playerClass) {
             case 1:
             className = "Assault";

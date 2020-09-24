@@ -14,6 +14,7 @@ public class ReturnButton extends Button
 
     public void act() 
     {
+        // draw the button
         MouseInfo mouseInfo = Greenfoot.getMouseInfo();
         Color currentColor = new Color(5,5,50);
         if (mouseInfo != null) {
@@ -35,7 +36,8 @@ public class ReturnButton extends Button
         setImage(image);
     }
 
-    public void returnToMenu() {      
+    public void returnToMenu() {
+        // on click return to the menu
         MainMenu main = new MainMenu();
         Greenfoot.setWorld(main);
     }

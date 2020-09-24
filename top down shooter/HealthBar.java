@@ -18,6 +18,7 @@ public class HealthBar extends Actor
     
     public void act() 
     {
+         // draw health bar
          GreenfootImage image = new GreenfootImage(800, 800);
          image.setColor(Color.WHITE);
          image.drawRect(99, 649, 601, 31);

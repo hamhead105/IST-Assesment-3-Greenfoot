@@ -2,7 +2,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.List;
 
 /**
- * in game projectile, deals damage on collision with an enemy
+ * in game projectile, deals damage on collision with an enemy or player
  * 
  * @author Peter Jung
  * @version 1
@@ -26,19 +26,14 @@ public class Bullet extends GameObject
     public void act() 
     {
         collisionCheck();
-        timedDestroy();
         updateLocation();
+        // move the bullet in the direction it is facing
         moveX((int) Math.round(Math.cos(Math.toRadians(getRotation())) * speed));
         moveY((int) Math.round(Math.sin(Math.toRadians(getRotation())) * speed));
     }
-
-    public void timedDestroy() {
-        if (System.currentTimeMillis() > cullTime) {
-            //getWorld().removeObject(this);
-        }
-    }
-
+    
     private void collisionCheck() {
+        //check if touching an object
         boolean willRemove = false;
         List<NPC> npcs = getWorld().getObjects(NPC.class);
         for (NPC npc : npcs) {
@@ -46,7 +41,7 @@ public class Bullet extends GameObject
                 npc.hit(damage);
                 willRemove = true;
                 BloodSplatter bloodSplatter = new BloodSplatter(getFieldX(), getFieldY(), getRotation());
-                getWorld().addObject(bloodSplatter,0,0);
+                getWorld().addObject(bloodSplatter,-500,-500);
             }      
         }
 
@@ -57,7 +52,7 @@ public class Bullet extends GameObject
                     player.hit(damage);
                     willRemove = true;
                     BloodSplatter bloodSplatter = new BloodSplatter(getFieldX(), getFieldY(), getRotation());
-                    getWorld().addObject(bloodSplatter,0,0);
+                    getWorld().addObject(bloodSplatter,-500,-500);
                 }      
             }
         }

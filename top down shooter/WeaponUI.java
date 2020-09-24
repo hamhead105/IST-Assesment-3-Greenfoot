@@ -10,13 +10,9 @@ public class WeaponUI extends Actor
 {
     private int currentAmmo;
     private int maxAmmo;
-    
-    public void act() 
-    {
-         
-    }
-    
+
     public void setAmmoCount(int currentAmmo, int maxAmmo, int gunType) {
+        // set weapon image and current ammo
         this.currentAmmo = currentAmmo;
         this.maxAmmo = maxAmmo;
         GreenfootImage image = new GreenfootImage(1200, 1200);

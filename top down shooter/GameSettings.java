@@ -72,6 +72,7 @@ public class GameSettings extends Actor
     }
 
     public static boolean checkScore() {
+        // if the current score exceeds the high score set the userInfo score to the new score and then return true
         UserInfo info = UserInfo.getMyInfo();
         if (UserInfo.isStorageAvailable()) {
             if (currentScore > info.getScore()) {
@@ -83,7 +84,6 @@ public class GameSettings extends Actor
                 //System.out.println("old score");
                 return false;
             }
-
         }
         else {
             System.out.println("unavailable");

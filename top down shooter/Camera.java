@@ -25,6 +25,7 @@ public class Camera extends Actor
     
     public void act() 
     {
+        // use proportional controller to move camera
         camX += (int) Math.round((targetCamX - camX) / cameraSpeed);
         camY += (int) Math.round((targetCamY - camY) / cameraSpeed);
     } 

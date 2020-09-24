@@ -11,11 +11,12 @@ public class BloodSplatter extends GameObject
     public BloodSplatter(int x, int y, int rot) {
         super(x,y);
         getImage().scale(140,120);
-        setRotation(rot);
-        
+        setRotation(rot);       
     }
+    
     public void act() 
     {
+        // decrease transparency and then destroy
         updateLocation();
         if (getImage().getTransparency() <= 5) {
             getWorld().removeObject(this);

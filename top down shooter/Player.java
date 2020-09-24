@@ -10,7 +10,7 @@ import java.util.List;
 public class Player extends GameObject
 {
     private int speed;
-    private double cameraBias; // a higher bias will mean the camera drifts further away;
+    private double cameraBias; // a higher bias will mean the camera drifts further away
     private boolean mouseDown;    
     private int health;
     private int colliderRadius = 30;
@@ -45,7 +45,7 @@ public class Player extends GameObject
         GameSettings.setCurrentScore(150);
 
         switch (GameSettings.getPlayerClass()) {
-            case 1:
+            case 1: // class 1 - assault
             GreenfootImage image = new GreenfootImage("combatant1.png");
             image.scale(240,200);
             setImage(image);
@@ -68,7 +68,7 @@ public class Player extends GameObject
             FOV = 110;
             damage = 20;
             break;
-            case 2:
+            case 2: // class 2 - recon
             GreenfootImage image2 = new GreenfootImage("combatant4.png");
             image2.scale(240,200);
             setImage(image2);
@@ -104,7 +104,8 @@ public class Player extends GameObject
         if (health > 0) {          
             //System.out.println(spreadCurrent);
             MouseInfo mouseInfo = Greenfoot.getMouseInfo();
-
+            
+            // movement code uses GameObject class
             if (Greenfoot.isKeyDown("W") && !collisionCheck(1)) {
                 moveY(-speed);
             }
@@ -171,6 +172,7 @@ public class Player extends GameObject
     }
 
     public void lookAtPosition(int x, int y) {
+        // rotate towards a certain position
         setRotation((int) Math.round(Math.toDegrees((Math.atan2(y + Camera.getCamY() - getFieldY(), x + Camera.getCamX() - getFieldX())))) + 90); 
         /* if (x - fieldX > 0 && y - fieldY > 0) {  // sector 1
         setRotation((int) Math.round(Math.atan2(fieldY - y, fieldX - x))); 
@@ -179,6 +181,7 @@ public class Player extends GameObject
     }
 
     public void updateCamPlayerOffset(int x, int y) {
+        // update the target position of the camera based on my current position
         Camera.setTargetCamX((int) Math.round(this.getFieldX() + ((x - getWorld().getWidth() / 2) * cameraBias) - (getWorld().getWidth() / 2)));
         Camera.setTargetCamY((int) Math.round (this.getFieldY() + ((y - getWorld().getHeight() / 2) * cameraBias) - (getWorld().getHeight() / 2)));
         //Camera.setCamPosition((int) Math.round(this.getFieldX() + (x * cameraBias) - (getWorld().getWidth() / 2)), (int) Math.round (this.getFieldY() + (y * cameraBias) - getWorld().getHeight()));
@@ -193,6 +196,7 @@ public class Player extends GameObject
     }
 
     public void shoot() {
+        // shoot a bullet
         if (gunType == 1) {
             Greenfoot.playSound("M4 Sounds.mp3");
         } else if (gunType == 2) {
@@ -200,6 +204,7 @@ public class Player extends GameObject
         }
         currentAmmo--;
         updateAmmoCount();
+        // ensure that the bullet comes out of the point of the gun
         int barrelXOffset = 13;
         int barrelYOffset = 55;
         double alpha = 0;
@@ -223,11 +228,13 @@ public class Player extends GameObject
     }
 
     public void hit(int damage) {
+        // reduce health on hit
         health -= damage;
         updateHealthBar();
     }
 
     public void updateHealthBar() {
+        // update health UI element
         List<HealthBar> healthBars = getWorld().getObjects(HealthBar.class);
         for (HealthBar healthBar : healthBars) {
             healthBar.setHealth(health);
@@ -235,6 +242,7 @@ public class Player extends GameObject
     }
 
     public void updateAmmoCount() {
+        // update gun UI element
         List<WeaponUI> weaponUIs = getWorld().getObjects(WeaponUI.class);
         for (WeaponUI weaponUI : weaponUIs) {
             weaponUI.setAmmoCount(currentAmmo,maxAmmo,gunType);
@@ -242,10 +250,12 @@ public class Player extends GameObject
     }
 
     public int getColliderRadius() {
+        // return space that the object takes up
         return colliderRadius;
     }
 
     public void fadeAway() {
+        // reduce transparency and then load the end screen
         getImage().setTransparency(getImage().getTransparency() - 30);
         if (getImage().getTransparency() <= 30) {
             //getWorld().removeObject(this);
@@ -256,6 +266,7 @@ public class Player extends GameObject
     }
 
     private boolean collisionCheck(int direction) {
+        // check if the moving direction is obstructed by a wall
         // 1 - up
         // 2 - right
         // 3 - down
@@ -311,6 +322,7 @@ public class Player extends GameObject
     }
 
     public boolean weaponReady() {
+        // check if weapon is cooled
         if ((int)System.currentTimeMillis() >= nextShotAvailable) {
             nextShotAvailable = (int) System.currentTimeMillis() + fireRate;
             return true;
@@ -320,11 +332,13 @@ public class Player extends GameObject
     }
 
     public void updateWeaponControl() {
+        // update recoil spread values over frames
         if (spreadCurrent > spreadMax) spreadCurrent = spreadMax;
         spreadCurrent += (spreadMin - spreadCurrent) / spreadRecover;
     }
 
     public void winLevel() {
+        // called when the player touches the flag
         switch(GameSettings.getDifficulty()) {
             case 1:
             GameSettings.addCurrentScore(500);
@@ -343,6 +357,7 @@ public class Player extends GameObject
     }
 
     public void updateEnemyVisibility(int range) {
+        // check each enemy and see if they are within the player's vision
         double checkRotationRadians = 0;
         List<NPC> npcs = getWorld().getObjects(NPC.class);
         for (NPC npc : npcs) {

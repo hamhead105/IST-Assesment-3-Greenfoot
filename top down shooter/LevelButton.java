@@ -25,7 +25,8 @@ public class LevelButton extends Button
         }  
     }
     
-    public void loadMyLevel() {      
+    public void loadMyLevel() {
+        // on click load the desired level
         if (level == 1) {
             Level1 level1 = new Level1();
             Greenfoot.setWorld(level1);

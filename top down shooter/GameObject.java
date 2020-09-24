@@ -15,13 +15,9 @@ public class GameObject extends Actor
         this.fieldX = x;
         this.fieldY = y;
     }
-  
-    public void act() 
-    {
-        // setLocation (fieldX - Camera.getCamX(), fieldY - Camera.getCamY());
-    }    
     
     public void updateLocation() {
+        // set my position on screen based on static camera position and object position
        setLocation (fieldX - Camera.getCamX(), fieldY - Camera.getCamY());
     }
     

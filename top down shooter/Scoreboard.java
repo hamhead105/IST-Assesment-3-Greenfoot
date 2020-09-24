@@ -12,6 +12,7 @@ public class Scoreboard extends Actor
     
     public void act() 
     {
+        // draw a scoreboard based on current score
         score = GameSettings.getCurrentScore();
         GreenfootImage image = new GreenfootImage(1600, 1200);
         image.setColor(Color.WHITE);

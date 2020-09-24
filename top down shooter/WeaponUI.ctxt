@@ -1,8 +1,6 @@
 #BlueJ class context
 comment0.target=WeaponUI
 comment0.text=\r\n\ UI\ element\ for\ weapon\ statistics\r\n\ \r\n\ @author\ Peter\ Jung\r\n\ @version\ 1\r\n
-comment1.params=
-comment1.target=void\ act()
-comment2.params=currentAmmo\ maxAmmo\ gunType
-comment2.target=void\ setAmmoCount(int,\ int,\ int)
-numComments=3
+comment1.params=currentAmmo\ maxAmmo\ gunType
+comment1.target=void\ setAmmoCount(int,\ int,\ int)
+numComments=2

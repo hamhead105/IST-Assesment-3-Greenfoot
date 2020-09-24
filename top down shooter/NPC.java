@@ -65,7 +65,6 @@ public class NPC extends GameObject
             fireRate = 20;
             shootSpread = 15;
             break;
-
         }
     }
 
@@ -90,6 +89,7 @@ public class NPC extends GameObject
     }
 
     public void runDifficultyEasy() {
+        // AI for easy difficulty
         if (health >= 0) {
             if (hasSeenPlayer || alerted) {
                 aimAtPlayer();
@@ -102,8 +102,6 @@ public class NPC extends GameObject
             if (Greenfoot.getRandomNumber(50) == 1) {
                 direction = Greenfoot.getRandomNumber(4) + 1;
             }
-            //System.out.println(direction);
-            //aimAtPlayer();
             if (currentTime > nextShotDue && checkFrame == 1) {
                 if (findTarget(1200)) {                    
                     shoot();
@@ -117,6 +115,7 @@ public class NPC extends GameObject
     }
 
     public void runDifficultyMedium() {
+        // AI for medium difficulty
         if (health >= 0) {
             if (hasSeenPlayer || alerted) {
                 aimAtPlayer();
@@ -160,6 +159,7 @@ public class NPC extends GameObject
     }
 
     public void runDifficultyHard() {
+        //AI for hard difficulty
         if (health >= 0) {
             if (hasSeenPlayer || alerted) {
                 aimAtPlayer();
@@ -203,12 +203,12 @@ public class NPC extends GameObject
     }
 
     public void hit(int damage) {
+        // decrease health when called
         health -= damage;
-        getImage().setColor(Color.RED);
-        //getImage().fill();
     }
 
     public void fadeAway() {
+        // decrease transparency and then destroy
         if (getImage().getTransparency() <= 30) {
             GameSettings.setCurrentScore(GameSettings.getCurrentScore() + 200*difficulty);
             getWorld().removeObject(this);
@@ -218,10 +218,12 @@ public class NPC extends GameObject
     }
 
     public int getColliderRadius() {
+        // return the bounds in which this object occupies
         return colliderRadius;
     }
 
     public void aimAtPlayer() {
+        // aim at the player using a P-controller
         List<Player> players = getWorld().getObjects(Player.class);
         if (players.size() > 0) {
             int rotationForce;
@@ -244,6 +246,7 @@ public class NPC extends GameObject
     }
 
     public void aimAtRotation(int rotation) {
+        // aim at a defined rotation using a P-Controller
         int rotationForce;
         int targetRotation = rotation;   
         int currentRotation = getRotation() + 90;
@@ -265,6 +268,7 @@ public class NPC extends GameObject
     }
 
     public void shoot() {
+        // fire a bullet in current rotation
         Greenfoot.playSound("HK416.mp3");
         int barrelXOffset = 16;
         int barrelYOffset = 55;
@@ -282,6 +286,7 @@ public class NPC extends GameObject
     }
 
     public boolean findTarget(int range) {
+        // check if player is within vision
         double checkRotationRadians = 0;
         boolean isVisible = true;
         hasSeenPlayer = true;
@@ -324,9 +329,6 @@ public class NPC extends GameObject
                             if (rotationCorners[i] < smallest) smallest = rotationCorners[i];
                         }
                         double distanceToWall = Math.sqrt((Math.pow(boxWall.getFieldX() - this.getFieldX(), 2) + (Math.pow(boxWall.getFieldY() - this.getFieldY(), 2))));
-                        //System.out.println("smallest: " + smallest + " | largest: " + largest + " | player: " + rotationToPlayer);
-                        //TODO find shortest rotation instead of subtracting
-
                         if (distanceToWall < distanceToPlayer) {
                             //System.out.println("B");
                             if (smallest < 0 && largest > 0) {
@@ -392,6 +394,7 @@ public class NPC extends GameObject
     }
 
     private boolean collisionCheck(int direction) {
+        // check if there is a wall in the way
         // 1 - up
         // 2 - right
         // 3 - down
@@ -447,6 +450,7 @@ public class NPC extends GameObject
     }
 
     public void setVisible(boolean visible) {
+        // called by the player to set visibility
         if (visible && health > 0) {
             getImage().setTransparency(255); 
         } else if (health > 0) {
@@ -455,6 +459,7 @@ public class NPC extends GameObject
     }
 
     public void addRelaxTime(int time) {
+        // aim at last seen player position during this time
         relaxTime = currentTime + time;
     }
 

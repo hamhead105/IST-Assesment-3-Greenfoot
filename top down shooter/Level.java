@@ -20,13 +20,14 @@ public class Level extends World
     
     public Level()
     {    
-        // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
+        // Create a new world with 1200x700 cells with a cell size of 1x1 pixels.
         super(1200, 700, 1, false);   
         getBackground().setColor(new Color(5,5,50));
         getBackground().fillRect(0, 0, 1200, 700);
     }
     
     public void constructLevel(int[] levelStructure, int levelLength) {
+        // create UI elements and initiate createLevel
         this.levelStructure = levelStructure;
         this.levelLength = levelLength;
         createLevel();     
@@ -39,6 +40,7 @@ public class Level extends World
     }
     
     public void createLevel() {
+        // build the level using given information from child classes
         int i = 0;
         for (int object : levelStructure) {
             addGameObject(object, ((i % levelLength) * 90) + (90 * levelXOffset), ((int) Math.floor(i / levelLength) * 90) + (90 * levelYOffset));
@@ -53,6 +55,7 @@ public class Level extends World
     }
     
     public void addGameObject(int objectType, int x, int y) {
+        // read each digit of the object list
         if (objectType == 1) {
             boxWalls.add(new BoxWall(x,y));
         }
@@ -68,6 +71,7 @@ public class Level extends World
     }
     
     public void createGameObjects() {
+        // check each list and create the objects to the world
         for (BoxWall boxWall : boxWalls) {
             addObject(boxWall, 0, 0);
         }

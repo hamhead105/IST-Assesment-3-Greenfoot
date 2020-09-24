@@ -1,12 +1,10 @@
 #BlueJ class context
 comment0.target=Bullet
-comment0.text=\r\n\ in\ game\ projectile,\ deals\ damage\ on\ collision\ with\ an\ enemy\r\n\ \r\n\ @author\ Peter\ Jung\r\n\ @version\ 1\r\n
+comment0.text=\r\n\ in\ game\ projectile,\ deals\ damage\ on\ collision\ with\ an\ enemy\ or\ player\r\n\ \r\n\ @author\ Peter\ Jung\r\n\ @version\ 1\r\n
 comment1.params=x\ y\ direction\ speed\ size\ damage
 comment1.target=Bullet(int,\ int,\ int,\ int,\ int,\ int)
 comment2.params=
 comment2.target=void\ act()
 comment3.params=
-comment3.target=void\ timedDestroy()
-comment4.params=
-comment4.target=void\ collisionCheck()
-numComments=5
+comment3.target=void\ collisionCheck()
+numComments=4

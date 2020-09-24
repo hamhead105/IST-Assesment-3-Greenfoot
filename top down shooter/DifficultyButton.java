@@ -15,6 +15,7 @@ public class DifficultyButton extends Button
     }
 
     public void act() {
+        // draw button
         Color currentColor = new Color(5,5,50);
         GameSettings.setDifficulty(difficulty);
 
@@ -29,6 +30,7 @@ public class DifficultyButton extends Button
             }  
         }
         String difficultyName = "";
+        // toggle difficulty
         switch(difficulty) {
             case 1:
             difficultyName = "Easy";
@@ -52,6 +54,7 @@ public class DifficultyButton extends Button
     }
 
     public void cycleDifficulty() {
+        // on click cycle the desired difficulty
         difficulty++;
         if (difficulty > 3) difficulty = 1;
     }

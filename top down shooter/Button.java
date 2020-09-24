@@ -24,7 +24,7 @@ public class Button extends Actor
         // Add your action code here.
     }
     
-    // is the mouse hovering over the mouse
+    // is the mouse hovering over the button
     public boolean wasClicked(int x, int y) {
         if (x + clickXOffset > getX() - (clickBoundaryX / 2) &&
             x + clickXOffset < getX() + (clickBoundaryX / 2) &&

@@ -20,16 +20,17 @@ public class Level extends World
     
     public Level()
     {    
-        // Create a new world with 1200x700 cells with a cell size of 1x1 pixels.
         super(1200, 700, 1, false);   
         getBackground().setColor(new Color(5,5,50));
         getBackground().fillRect(0, 0, 1200, 700);
     }
     
-    public void constructLevel(int[] levelStructure, int levelLength) {
+    public void constructLevel(int[] levelStructure, int levelLength, int levelXOffset, int levelYOffset) {
         // create UI elements and initiate createLevel
         this.levelStructure = levelStructure;
         this.levelLength = levelLength;
+        this.levelXOffset = levelXOffset;
+        this.levelYOffset = levelYOffset;
         createLevel();     
         HealthBar healthBar = new HealthBar();
         addObject(healthBar, 600, 400);

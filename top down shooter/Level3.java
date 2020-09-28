@@ -9,7 +9,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Level3 extends Level
 {
-    private int levelXOffset = -1;
+    private int levelXOffset = -40;
     private int levelYOffset = -1;
     private int levelLength = 42;
     int[] levelStructure = {
@@ -49,6 +49,6 @@ public class Level3 extends Level
 
 
     public Level3() {
-        constructLevel(levelStructure, levelLength);
+        constructLevel(levelStructure, levelLength, levelXOffset, levelYOffset);
     }
 }

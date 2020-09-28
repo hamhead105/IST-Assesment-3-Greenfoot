@@ -24,6 +24,6 @@ public class test extends Level
     };    
     
     public test() {
-        constructLevel(levelStructure, levelLength);
+       constructLevel(levelStructure, levelLength, levelXOffset, levelYOffset);
     }
 }
